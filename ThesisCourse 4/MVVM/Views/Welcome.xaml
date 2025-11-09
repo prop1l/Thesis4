@@ -1,0 +1,98 @@
+﻿<Window x:Class="ThesisCourse_4.MVVM.Views.Welcome"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ThesisCourse_4.MVVM.Views"
+        
+        xmlns:ctrl="clr-namespace:ThesisCourse_4.Resources"
+        
+        mc:Ignorable="d"
+        Title="Welcome"
+        Height="1024" Width="1440"
+        Background="Transparent"
+        AllowsTransparency="False"
+        WindowStyle="None"
+        ResizeMode="CanResize">
+
+    <Border Background="{DynamicResource BackgroundBrush}">
+        <Grid x:Name="MainGrid">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition Height="98"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="102"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="102"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="102"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="102"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="102"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="102"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="102"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="102"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="102"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="102"/>
+                <ColumnDefinition Width="120"/>
+            </Grid.ColumnDefinitions>
+
+            <ctrl:Header Grid.ColumnSpan="21" x:Name="Header"/>
+
+            <ToggleButton Style="{StaticResource SwitchToggleButtonStyle}"
+                          Width="60" Height="30"
+                          IsChecked="{Binding IsLight, Mode=TwoWay}"
+                          Content="{Binding IsLight}"
+                          Grid.Row="0"
+                          Grid.Column="5"/>
+
+
+
+            <Button Style="{StaticResource RoundedDashedBorderButton}"
+                    Grid.Column="15"
+                    Grid.ColumnSpan="5"
+                    Grid.Row="4"
+                    Foreground="{DynamicResource ForegroundBrush}"
+                    Content="Add"
+                    FontSize="24"
+                    Background="Transparent"
+                    BorderBrush="{DynamicResource ButtonNormalBackground}"
+                    BorderThickness="2"
+                    Click="AddButton_Click"/>
+
+            <ScrollViewer x:Name="MainScrollViewer"
+                          Grid.Row="1" Grid.RowSpan="3"
+                          Grid.Column="1" Grid.ColumnSpan="19"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled"
+                          Style="{StaticResource ModernScrollViewer}">
+
+                <Grid x:Name="ButtonsContainer">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="7*" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="5*" />
+                    </Grid.ColumnDefinitions>
+                </Grid>
+            </ScrollViewer>
+
+        </Grid>
+    </Border>
+
+</Window>

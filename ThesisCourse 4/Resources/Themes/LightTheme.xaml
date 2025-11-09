@@ -1,0 +1,37 @@
+﻿<!-- <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#a3b18a"/>
+    <SolidColorBrush x:Key="ForegroundBrush" Color="#588157"/>
+
+    <SolidColorBrush x:Key="TitleBarBackgroundBrush" Color="#1c7795"/>
+    <SolidColorBrush x:Key="TitleBarForegroundBrush" Color="#102e3c"/>
+    <SolidColorBrush x:Key="TitleBarCloseForegroundBrush" Color="#FFFFFF"/>
+
+    <SolidColorBrush x:Key="ButtonNormalBackground" Color="#4A90E2"/>
+    <SolidColorBrush x:Key="ButtonHoverBackground" Color="#357ABD"/>
+    <SolidColorBrush x:Key="ButtonPressedBackground" Color="#2A6399"/>
+    <SolidColorBrush x:Key="ButtonForeground" Color="White"/>
+
+</ResourceDictionary> -->
+
+
+
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#EFEFEF"/>
+    <SolidColorBrush x:Key="ForegroundBrush" Color="#2D3748"/>
+
+    <SolidColorBrush x:Key="TitleBarBackgroundBrush" Color="#F8F9FA"/>
+    <SolidColorBrush x:Key="TitleBarForegroundBrush" Color="#495057"/>
+    <SolidColorBrush x:Key="TitleBarCloseForegroundBrush" Color="#868E96"/>
+
+    <SolidColorBrush x:Key="ButtonNormalBackground" Color="#4C6EF5"/>
+    <SolidColorBrush x:Key="ButtonHoverBackground" Color="#3B5BDD"/>
+    <SolidColorBrush x:Key="ButtonPressedBackground" Color="#2A4BD5"/>
+    <SolidColorBrush x:Key="ButtonForeground" Color="White"/>
+
+    <SolidColorBrush x:Key="CloseButtonHoverBrush" Color="#E53E3E"/>
+
+</ResourceDictionary>
