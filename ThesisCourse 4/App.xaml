@@ -9,7 +9,7 @@
                 <!-- ТЕМА ПО УМОЛЧАНИЮ (обязательно первая!) -->
                 <ResourceDictionary Source="/Resources/Themes/LightTheme.xaml" />
 
-<!--
+                <!--
                         СТИЛИ
 -->
                 <!--    Buttons  -->
@@ -28,7 +28,7 @@
                 <!--    ToggleButtons  -->
                 <ResourceDictionary Source="/Resources/Styles/ToggleButtons/SwitchToggleButtomStyle.xaml"/>
 
-                
+
                 <!--    ScrollViewer  -->
                 <ResourceDictionary Source="/Resources/Styles/SrcollViewer/ModernScrollBarStyle.xaml"/>
 

@@ -29,10 +29,11 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Text="{Binding Title, RelativeSource={RelativeSource AncestorType=Window}}"
-                    Foreground="{DynamicResource TitleBarForegroundBrush}"
-                    VerticalAlignment="Center"
-                    Margin="10,0"
-                    Grid.Column="0"/>
+                       Foreground="{DynamicResource TitleBarForegroundBrush}"
+                       VerticalAlignment="Center"
+                       Margin="10,0"
+                       Grid.Column="0"
+                       FontSize="24"/>
 
             <StackPanel Orientation="Horizontal"
                     VerticalAlignment="Center"

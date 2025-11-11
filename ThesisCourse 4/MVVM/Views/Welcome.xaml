@@ -8,50 +8,114 @@
         xmlns:ctrl="clr-namespace:ThesisCourse_4.Resources"
         
         mc:Ignorable="d"
-        Title="Welcome"
-        Height="1024" Width="1440"
+        Title="GraphIS"
+        Height="1024" MinHeight="1024"
+        Width="1440" MinWidth="1440"
         Background="Transparent"
         AllowsTransparency="False"
         WindowStyle="None"
-        ResizeMode="CanResize">
+        ResizeMode="CanResize"
+        WindowStartupLocation="CenterScreen">
 
     <Border Background="{DynamicResource BackgroundBrush}">
         <Grid x:Name="MainGrid">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
+                <RowDefinition Height="50"/>
                 <RowDefinition Height="98"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="102"/>
-                <ColumnDefinition />
-                <ColumnDefinition Width="102"/>
-                <ColumnDefinition />
-                <ColumnDefinition Width="102"/>
-                <ColumnDefinition />
-                <ColumnDefinition Width="102"/>
-                <ColumnDefinition />
-                <ColumnDefinition Width="102"/>
-                <ColumnDefinition />
-                <ColumnDefinition Width="102"/>
-                <ColumnDefinition />
-                <ColumnDefinition Width="102"/>
-                <ColumnDefinition />
-                <ColumnDefinition Width="102"/>
-                <ColumnDefinition />
-                <ColumnDefinition Width="102"/>
-                <ColumnDefinition />
-                <ColumnDefinition Width="102"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="1.36*"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="120"/>
             </Grid.ColumnDefinitions>
 
-            <ctrl:Header Grid.ColumnSpan="21" x:Name="Header"/>
+
+
+
+            <Border Grid.Row="6"
+                    Grid.Column="1" Grid.ColumnSpan="5" Margin="-20,-20,-20,-20"
+                    Background="{DynamicResource SecondBackgroundBrush}"
+                    CornerRadius="20">
+
+                <Grid >
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="346"/>
+                        <ColumnDefinition Width="20"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Grid.Row="1"
+                             Grid.Column="1"
+                             x:Name="GraphNameTextBox"
+                             Style="{StaticResource RoundedPlaceholderTextBox}"
+                             Foreground="Gray"
+                             Height="55"
+                             FontSize="24"
+                             Tag="Введите название для графа"
+                             GotFocus="LoginFocus"
+                             VerticalAlignment="Center"/>
+
+
+                    <Button Style="{StaticResource RoundedDashedBorderButton}"
+                            Grid.Column="3" Grid.Row="1"
+                            Foreground="{DynamicResource ForegroundBrush}"
+                            Content="Добавить"
+                            FontSize="36"
+                            Background="Transparent"
+                            BorderBrush="{DynamicResource ButtonNormalBackground}"
+                            BorderThickness="4"
+                            Click="AddButton_Click"/>
+
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="0" Grid.RowSpan="5"
+                    Grid.Column="1" Grid.ColumnSpan="5" 
+                    Margin="-40,-1,-40,0"
+                    CornerRadius="20"
+                    Background="{DynamicResource SecondBackgroundBrush}">
+
+                <ScrollViewer x:Name="MainScrollViewer"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled"
+                              Style="{StaticResource ModernScrollViewer}"
+                              Margin="40,80,40,75">
+
+                    <Grid x:Name="ButtonsContainer">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="1.36*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ScrollViewer>
+            </Border>
+
+            <ctrl:Header Grid.ColumnSpan="7" x:Name="Header"/>
+
 
             <ToggleButton Style="{StaticResource SwitchToggleButtonStyle}"
                           Width="60" Height="30"
@@ -59,38 +123,6 @@
                           Content="{Binding IsLight}"
                           Grid.Row="0"
                           Grid.Column="5"/>
-
-
-
-            <Button Style="{StaticResource RoundedDashedBorderButton}"
-                    Grid.Column="15"
-                    Grid.ColumnSpan="5"
-                    Grid.Row="4"
-                    Foreground="{DynamicResource ForegroundBrush}"
-                    Content="Add"
-                    FontSize="24"
-                    Background="Transparent"
-                    BorderBrush="{DynamicResource ButtonNormalBackground}"
-                    BorderThickness="2"
-                    Click="AddButton_Click"/>
-
-            <ScrollViewer x:Name="MainScrollViewer"
-                          Grid.Row="1" Grid.RowSpan="3"
-                          Grid.Column="1" Grid.ColumnSpan="19"
-                          VerticalScrollBarVisibility="Auto"
-                          HorizontalScrollBarVisibility="Disabled"
-                          Style="{StaticResource ModernScrollViewer}">
-
-                <Grid x:Name="ButtonsContainer">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="5*" />
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="7*" />
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="5*" />
-                    </Grid.ColumnDefinitions>
-                </Grid>
-            </ScrollViewer>
 
         </Grid>
     </Border>

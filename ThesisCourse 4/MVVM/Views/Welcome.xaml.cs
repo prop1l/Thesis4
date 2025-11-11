@@ -1,33 +1,69 @@
-﻿using System;
-using System.IO;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using ThesisCourse_4.MVVM.Models;
+using ThesisCourse_4.MVVM.ViewModels;
 
 namespace ThesisCourse_4.MVVM.Views
 {
     public partial class Welcome : Window
     {
-        private static string ButtonsFilePath =>
-            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "buttons.txt");
-
-        private int _buttonCounter = 1;
+        private readonly WelcomeViewModels _viewModel;
 
         public Welcome()
         {
+            var themeService = new ThesisCourse_4.Services.ThemeService();
+            _viewModel = new WelcomeViewModels(themeService);
+            DataContext = _viewModel;
+
             InitializeComponent();
+
+            _viewModel.Buttons.CollectionChanged += (_, _) => RebuildButtons();
+            _viewModel.Initialize();
 
             PreviewMouseLeftButtonDown += OnPreviewMouseLeftButtonDown;
             PreviewMouseDoubleClick += OnPreviewMouseDoubleClick;
             MainScrollViewer.PreviewMouseWheel += OnScrollViewerMouseWheel;
-
-            LoadButtons();
         }
 
-        #region Заголовок
+        private void RebuildButtons()
+        {
+            ButtonsContainer.Children.Clear();
+            ButtonsContainer.RowDefinitions.Clear();
 
+            foreach (var btnData in _viewModel.Buttons)
+            {
+                while (ButtonsContainer.RowDefinitions.Count <= btnData.Row)
+                    ButtonsContainer.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+
+                var button = new Button
+                {
+                    Content = btnData.Name,
+                    Style = (Style)FindResource("RoundedButton"),
+                    Margin = new Thickness(5),
+                    FontSize = 24,
+                    Height = 100
+                };
+
+                Grid.SetRow(button, btnData.Row);
+                Grid.SetColumn(button, btnData.Column);
+                button.Click += (_, _) => MessageBox.Show($"Нажата: {btnData.Name}");
+
+                ButtonsContainer.Children.Add(button);
+            }
+        }
+
+        private void LoginFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox tb && tb.Tag?.ToString() == "Введите название для графа")
+            {
+                tb.Text = "";
+                tb.Tag = null;
+                tb.Foreground = Brushes.Black;
+            }
+        }
+
+        #region Window Drag & Resize
         private bool IsClickInHeaderButNotButtons(object source)
         {
             var current = source as DependencyObject;
@@ -40,7 +76,7 @@ namespace ThesisCourse_4.MVVM.Views
                     if (fe.GetType().Name == "Header")
                         return true;
                 }
-                current = VisualTreeHelper.GetParent(current);
+                current = VisualTreeHelper.GetParent(current) as FrameworkElement;
             }
             return false;
         }
@@ -64,149 +100,40 @@ namespace ThesisCourse_4.MVVM.Views
                 e.Handled = true;
             }
         }
+        #endregion
 
+        #region Scroll Handling
         private void OnScrollViewerMouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (sender is ScrollViewer scrollViewer)
             {
-                double scrollSpeedFactor = 2.75;
-
+                const double scrollSpeedFactor = 2.75;
                 e.Handled = true;
-
-                scrollViewer.ScrollToVerticalOffset(
-                    scrollViewer.VerticalOffset - e.Delta * scrollSpeedFactor / 3
-                );
+                scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta * scrollSpeedFactor / 3);
             }
         }
         #endregion
-
-        #region Добавление кнопок
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            int index = ButtonsContainer.Children.Count; 
-            int row = index / 3;
-            int col = (index % 3) * 2; 
-
-            while (ButtonsContainer.RowDefinitions.Count <= row)
+            string name = GraphNameTextBox.Text;
+            if (string.IsNullOrWhiteSpace(name) || name == "Введите название для графа")
             {
-                ButtonsContainer.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+                MessageBox.Show("Вы не ввели название для графа");
+                return;
             }
 
-            var button = new Button
-            {
-                Content = $"Diamond Graph",
-                Style = (Style)FindResource("RoundedButton"),
-                Margin = new Thickness(5),
-                Padding = new Thickness(10),
-                Height = 100,
-            };
+            _viewModel.AddButton(name);
 
-            Grid.SetRow(button, row);
-            Grid.SetColumn(button, col);
-            button.Click += DynamicButton_Click;
-
-            ButtonsContainer.Children.Add(button);
-
-            SaveButtonData(new CustomButton
-            {
-                Name = button.Content.ToString(),
-                Row = row,
-                Column = col
-            });
-
-            _buttonCounter++;
-        }
-
-        private void DynamicButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button btn) MessageBox.Show($"Нажата кнопка: {btn.Content}", "Инфо", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
-        #endregion
-
-        #region Сохранение и загрузка
-
-        private void SaveButtonData(CustomButton btn)
-        {
-            try
-            {
-                File.AppendAllLines(ButtonsFilePath, new[] { btn.ToString() });
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка сохранения: {ex.Message}");
-            }
-        }
-
-        private void LoadButtons()
-        {
-            if (!File.Exists(ButtonsFilePath)) return;
-
-            try
-            {
-                var lines = File.ReadAllLines(ButtonsFilePath);
-                foreach (var line in lines)
-                {
-                    if (string.IsNullOrWhiteSpace(line)) continue;
-
-                    try
-                    {
-                        var data = CustomButton.FromString(line);
-                        while (ButtonsContainer.RowDefinitions.Count <= data.Row)
-                        {
-                            ButtonsContainer.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-                        }
-
-                        var button = new Button
-                        {
-                            Content = data.Name,
-                            Style = (Style)FindResource("RoundedButton"),
-                            Margin = new Thickness(5),
-                            Padding = new Thickness(10),
-                            Height = 100,
-                        };
-                        Grid.SetRow(button, data.Row);
-                        Grid.SetColumn(button, data.Column);
-                        button.Click += DynamicButton_Click;
-
-                        ButtonsContainer.Children.Add(button);
-                        _buttonCounter = Math.Max(_buttonCounter, ButtonsContainer.Children.Count + 1);
-                    }
-                    catch { }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка загрузки: {ex.Message}");
-            }
+            GraphNameTextBox.Text = "";
+            GraphNameTextBox.Foreground = Brushes.Gray;
+            GraphNameTextBox.Tag = "Введите название для графа";
         }
 
         protected override void OnClosed(EventArgs e)
         {
-            try
-            {
-                var lines = new System.Collections.Generic.List<string>();
-                for (int i = 0; i < ButtonsContainer.Children.Count; i++)
-                {
-                    if (ButtonsContainer.Children[i] is Button btn)
-                    {
-                        int row = Grid.GetRow(btn);
-                        int col = Grid.GetColumn(btn);
-                        lines.Add(new CustomButton
-                        {
-                            Name = btn.Content.ToString(),
-                            Row = row,
-                            Column = col
-                        }.ToString());
-                    }
-                }
-                File.WriteAllLines(ButtonsFilePath, lines);
-            }
-            catch { }
+            _viewModel.SaveButtons();
             base.OnClosed(e);
         }
-
-        #endregion
     }
 }

@@ -15,8 +15,8 @@
                                    Stroke="{TemplateBinding BorderBrush}"
                                    StrokeThickness="{TemplateBinding BorderThickness}"
                                    StrokeDashArray="4 4"
-                                   RadiusX="12"
-                                   RadiusY="12"
+                                   RadiusX="36"
+                                   RadiusY="36"
                                    SnapsToDevicePixels="True" />
 
                             <Border Background="{TemplateBinding Background}"

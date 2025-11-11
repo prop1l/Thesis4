@@ -11,7 +11,7 @@ namespace ThesisCourse_4.Services
         protected ThemedViewModelBase(IThemeService themeService)
         {
             _themeService = themeService;
-            _themeService.SwitchTheme(_isLight); 
+            _themeService.SwitchTheme(_isLight);
         }
 
         public bool IsLight
@@ -30,7 +30,7 @@ namespace ThesisCourse_4.Services
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

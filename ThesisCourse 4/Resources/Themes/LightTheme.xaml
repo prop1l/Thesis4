@@ -21,6 +21,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <SolidColorBrush x:Key="BackgroundBrush" Color="#EFEFEF"/>
+    <SolidColorBrush x:Key="SecondBackgroundBrush" Color="#DDDDDD"/>
     <SolidColorBrush x:Key="ForegroundBrush" Color="#2D3748"/>
 
     <SolidColorBrush x:Key="TitleBarBackgroundBrush" Color="#F8F9FA"/>
