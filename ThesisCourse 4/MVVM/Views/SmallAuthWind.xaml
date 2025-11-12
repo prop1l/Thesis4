@@ -15,25 +15,26 @@
         Background="Transparent"
         AllowsTransparency="True"
         WindowStyle="None"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
 
 
     <Border Background="{DynamicResource BackgroundBrush}"
             CornerRadius="15"
             Margin="20"
-            MouseDown="TitleBar_MouseLeftButtonDown">
+            MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
 
         <StackPanel Margin="20">
 
-            <ctrl:CloseButton/>
+            <ctrl:CloseButton Height="26"/>
 
-            <ToggleButton Style="{StaticResource SwitchToggleButtonStyle}"
+            <!-- <ToggleButton Style="{StaticResource SwitchToggleButtonStyle}"
                           Width="60" Height="30"
                           IsChecked="{Binding IsLight, Mode=TwoWay}"
                           Content="{Binding IsLight}"
                           HorizontalAlignment="Right"
                           VerticalAlignment="Top"
-                          Margin="10"/>
+                          Margin="10"/> -->
 
             <TextBlock Text="Авторизация"
                        Foreground="{DynamicResource ForegroundBrush}"

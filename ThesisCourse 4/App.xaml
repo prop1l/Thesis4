@@ -30,7 +30,10 @@
 
 
                 <!--    ScrollViewer  -->
-                <ResourceDictionary Source="/Resources/Styles/SrcollViewer/ModernScrollBarStyle.xaml"/>
+                <ResourceDictionary Source="/Resources/Styles/ScrollViewer/ModernScrollBarStyle.xaml"/>
+
+
+                <ResourceDictionary Source="/Resources/Icon.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

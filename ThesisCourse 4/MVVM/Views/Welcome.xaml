@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:ThesisCourse_4.MVVM.Views"
         
         xmlns:ctrl="clr-namespace:ThesisCourse_4.Resources"
+        xmlns:behaviors="clr-namespace:ThesisCourse_4.Behaviors"
         
         mc:Ignorable="d"
         Title="GraphIS"
@@ -41,9 +42,6 @@
                 <ColumnDefinition Width="120"/>
             </Grid.ColumnDefinitions>
 
-
-
-
             <Border Grid.Row="6"
                     Grid.Column="1" Grid.ColumnSpan="5" Margin="-20,-20,-20,-20"
                     Background="{DynamicResource SecondBackgroundBrush}"
@@ -65,27 +63,25 @@
                         <ColumnDefinition Width="20"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBox Grid.Row="1"
-                             Grid.Column="1"
-                             x:Name="GraphNameTextBox"
+                    <TextBox Grid.Row="1" Grid.Column="1"
+                             Text="{Binding GraphName, UpdateSourceTrigger=PropertyChanged}"
                              Style="{StaticResource RoundedPlaceholderTextBox}"
-                             Foreground="Gray"
-                             Height="55"
-                             FontSize="24"
                              Tag="Введите название для графа"
-                             GotFocus="LoginFocus"
+                             FontSize="24" Height="55"
                              VerticalAlignment="Center"/>
 
-
-                    <Button Style="{StaticResource RoundedDashedBorderButton}"
-                            Grid.Column="3" Grid.Row="1"
-                            Foreground="{DynamicResource ForegroundBrush}"
-                            Content="Добавить"
-                            FontSize="36"
-                            Background="Transparent"
-                            BorderBrush="{DynamicResource ButtonNormalBackground}"
-                            BorderThickness="4"
-                            Click="AddButton_Click"/>
+                    <Button Grid.Row="1" Grid.Column="3"
+                            Style="{StaticResource RoundedDashedBorderButton}"
+                            FontSize="20"
+                            Command="{Binding AddGraphCommand}">
+                        <StackPanel Orientation="Horizontal" >
+                            <Image Source="{StaticResource Icon_AddGraph}" 
+                                   Width="60" Height="40" 
+                                   RenderOptions.BitmapScalingMode="HighQuality"/>
+                            <TextBlock Text="Добавить"
+                                       FontSize="36" Height="57"/>
+                        </StackPanel>
+                    </Button>
 
                 </Grid>
             </Border>
@@ -96,31 +92,59 @@
                     CornerRadius="20"
                     Background="{DynamicResource SecondBackgroundBrush}">
 
-                <ScrollViewer x:Name="MainScrollViewer"
-                              VerticalScrollBarVisibility="Auto"
-                              HorizontalScrollBarVisibility="Disabled"
-                              Style="{StaticResource ModernScrollViewer}"
-                              Margin="40,80,40,75">
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled"
+                  Style="{StaticResource ModernScrollViewer}"
+                  Margin="40,80,40,75">
 
-                    <Grid x:Name="ButtonsContainer">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="20"/>
-                            <ColumnDefinition Width="1.36*"/>
-                            <ColumnDefinition Width="20"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                    </Grid>
+                    <ItemsControl ItemsSource="{Binding Buttons}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Grid x:Name="ButtonsContainer"
+                                      behaviors:DynamicGridBehavior.GridState="{Binding GridState}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="20"/>
+                                        <ColumnDefinition Width="1.36*"/>
+                                        <ColumnDefinition Width="20"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                </Grid>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="ContentPresenter">
+                                <Setter Property="Grid.Row" Value="{Binding Row}" />
+                                <Setter Property="Grid.Column" Value="{Binding Column}" />
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Content="{Binding Name}"
+                                        Style="{StaticResource RoundedButton}"
+                                        Height="100"
+                                        Margin="5"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
                 </ScrollViewer>
             </Border>
 
             <ctrl:Header Grid.ColumnSpan="7" x:Name="Header"/>
 
+            <Button Content="🔐 Войти"
+                    Command="{Binding OpenAuthWindowCommand}"
+                    Style="{StaticResource RoundedButton}"
+                    Margin="5"
+                    Padding="10,5"
+                    Grid.Column="3"/>
 
             <ToggleButton Style="{StaticResource SwitchToggleButtonStyle}"
                           Width="60" Height="30"
                           IsChecked="{Binding IsLight, Mode=TwoWay}"
-                          Content="{Binding IsLight}"
                           Grid.Row="0"
                           Grid.Column="5"/>
 
@@ -128,3 +152,6 @@
     </Border>
 
 </Window>
+
+
+        

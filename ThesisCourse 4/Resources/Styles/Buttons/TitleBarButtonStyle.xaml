@@ -19,7 +19,6 @@
                                           TextElement.Foreground="{TemplateBinding Foreground}"/>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <!-- Общее поведение для всех кнопок: убираем фокусную рамку -->
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="border" Property="Background" Value="#E9ECEF"/>
                         </Trigger>
@@ -29,7 +28,6 @@
         </Setter>
 
         <Style.Triggers>
-            <!-- Close Button: красный при наведении -->
             <Trigger Property="Content" Value="✖">
                 <Setter Property="Template">
                     <Setter.Value>

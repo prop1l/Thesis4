@@ -12,12 +12,12 @@ namespace ThesisCourse_4.MVVM.Views
         public SmallAuthWind()
         {
             InitializeComponent();
-            DataContext = new SmallAuthWindViewModel(new ThemeService());
+            DataContext = new SmallAuthViewModel(new ThemeService());
         }
 
         private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            
+            DragMove();
         }
 
         private void LoginFocus(object sender, RoutedEventArgs e)
@@ -26,10 +26,6 @@ namespace ThesisCourse_4.MVVM.Views
             loginTextBox.Foreground = Brushes.Black;
         }
 
-        private void CloseClick(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
 
         private async void OnLoginButtonClick(object sender, RoutedEventArgs e)
         {
