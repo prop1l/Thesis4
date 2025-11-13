@@ -8,15 +8,31 @@ namespace ThesisCourse_4.MVVM.ViewModels
 {
     public class WelcomeViewModel : ThemedViewModelBase
     {
+        public WelcomeViewModel(IThemeService themeService, IStorageService storageService, INavigationService navigationService) : base(themeService)
+        {
+            _storageService = storageService;
+            _navigationService = navigationService;
+
+            var saved = _storageService.LoadButtons();
+            foreach (var btn in saved)
+            {
+                Buttons.Add(btn);
+            }
+
+            UpdateGridState();
+
+            AddGraphCommand = new RelayCommand(OnAddGraph, CanAddGraph);
+            OpenAuthWindowCommand = new RelayCommand(OnOpenAuthWindow);
+            OpenGraphEditorCommand = new RelayCommand<ButtonModel>(OpenGraphEditor);
+        }
+
+
         private readonly IStorageService _storageService;
         private readonly INavigationService _navigationService;
-
         public ICommand AddGraphCommand { get; }
         public ICommand OpenAuthWindowCommand { get; }
         public ICommand OpenGraphEditorCommand { get; }
-
         private string _graphName = string.Empty;
-
         public ObservableCollection<ButtonModel> Buttons { get; } = new();
         private GridState _gridState = new() { RowCount = 3 };
 
@@ -34,24 +50,6 @@ namespace ThesisCourse_4.MVVM.ViewModels
         {
             get => _gridState;
             private set => SetProperty(ref _gridState, value);
-        }
-
-        public WelcomeViewModel(IThemeService themeService, IStorageService storageService, INavigationService navigationService) : base(themeService)
-        {
-            _storageService = storageService;
-            _navigationService = navigationService;
-
-            var saved = _storageService.LoadButtons();
-            foreach (var btn in saved)
-            {
-                Buttons.Add(btn);
-            }
-
-            UpdateGridState();
-
-            AddGraphCommand = new RelayCommand(OnAddGraph, CanAddGraph);
-            OpenAuthWindowCommand = new RelayCommand(OnOpenAuthWindow);
-            OpenGraphEditorCommand = new RelayCommand<ButtonModel>(OpenGraphEditor);
         }
 
         private void OnAddGraph()

@@ -3,55 +3,62 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Graph Editor"
         Width="800" Height="600">
-<DockPanel>
-    <ToolBar DockPanel.Dock="Top">
-        <Button Content="Добавить Узел" Command="{Binding AddNodeCommand}" />
-        <Button Content="Сохранить" Command="{Binding SaveCommand}" />
-    </ToolBar>
+    
+    <DockPanel>
+        <ToolBar DockPanel.Dock="Top">
+            <Button Content="Добавить Узел" Command="{Binding AddNodeCommand}" />
+            <Button Content="Сохранить" Command="{Binding SaveCommand}" />
+        </ToolBar>
 
-    <!-- ItemsControl для рёбер -->
-    <ItemsControl ItemsSource="{Binding Edges}">
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <Canvas Background="Transparent"/>
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <Line Stroke="Black" StrokeThickness="2"
-                      X1="{Binding FromNode.X}"
-                      Y1="{Binding FromNode.Y}"
-                      X2="{Binding ToNode.X}"
-                      Y2="{Binding ToNode.Y}"/>
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-    </ItemsControl>
+        <Grid>
+            <Canvas x:Name="PreviewCanvas" IsHitTestVisible="False" />
 
-    <!-- ItemsControl для узлов -->
-    <ItemsControl ItemsSource="{Binding Nodes}">
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <Canvas Background="Transparent"/>
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-        <ItemsControl.ItemContainerStyle>
-            <Style TargetType="ContentPresenter">
-                <Setter Property="Canvas.Left" Value="{Binding X, Mode=TwoWay}"/>
-                <Setter Property="Canvas.Top" Value="{Binding Y, Mode=TwoWay}"/>
-            </Style>
-        </ItemsControl.ItemContainerStyle>
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <Ellipse Width="60" Height="60"
-                         Fill="LightSteelBlue"
-                         Stroke="SteelBlue"
-                         StrokeThickness="2"
-                         PreviewMouseLeftButtonDown="Ellipse_PreviewMouseLeftButtonDown"
-                         PreviewMouseMove="Ellipse_PreviewMouseMove"
-                         PreviewMouseLeftButtonUp="Ellipse_PreviewMouseLeftButtonUp"/>
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-    </ItemsControl>
-</DockPanel>
+            <!-- Edge -->
+            <ItemsControl ItemsSource="{Binding Edges}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Background="Transparent"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Line Stroke="Black" StrokeThickness="2"
+                              X1="{Binding FromNode.CenterX}"
+                              Y1="{Binding FromNode.CenterY}"
+                              X2="{Binding ToNode.CenterX}"
+                              Y2="{Binding ToNode.CenterY}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
+            <!-- Node -->
+            <ItemsControl ItemsSource="{Binding Nodes}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Background="Transparent"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="ContentPresenter">
+                        <Setter Property="Canvas.Left" Value="{Binding X, Mode=TwoWay}"/>
+                        <Setter Property="Canvas.Top" Value="{Binding Y, Mode=TwoWay}"/>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Ellipse Width="60"
+                                 Height="60"
+                                 Fill="LightSteelBlue"
+                                 Stroke="SteelBlue"
+                                 StrokeThickness="2"
+                                 PreviewMouseLeftButtonDown="Ellipse_PreviewMouseLeftButtonDown"
+                                 PreviewMouseMove="Ellipse_PreviewMouseMove"
+                                 PreviewMouseLeftButtonUp="Ellipse_PreviewMouseLeftButtonUp"
+                                 PreviewMouseRightButtonDown="Ellipse_PreviewMouseRightButtonDown"
+                                 PreviewMouseRightButtonUp="Ellipse_PreviewMouseRightButtonUp" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+    </DockPanel>
 </Window>
