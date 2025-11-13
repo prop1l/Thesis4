@@ -4,10 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ThesisCourse_4.MVVM.Views"
-        
         xmlns:ctrl="clr-namespace:ThesisCourse_4.Resources"
         xmlns:behaviors="clr-namespace:ThesisCourse_4.Behaviors"
-        
         mc:Ignorable="d"
         Title="GraphIS"
         Height="1024" MinHeight="1024"
@@ -47,7 +45,7 @@
                     Background="{DynamicResource SecondBackgroundBrush}"
                     CornerRadius="20">
 
-                <Grid >
+                <Grid>
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20"/>
@@ -68,7 +66,8 @@
                              Style="{StaticResource RoundedPlaceholderTextBox}"
                              Tag="Введите название для графа"
                              FontSize="24" Height="55"
-                             VerticalAlignment="Center"/>
+                             VerticalAlignment="Center"
+                             Foreground="{DynamicResource ForegroundBrushToTextBox}"/>
 
                     <Button Grid.Row="1" Grid.Column="3"
                             Style="{StaticResource RoundedDashedBorderButton}"
@@ -79,7 +78,8 @@
                                    Width="60" Height="40" 
                                    RenderOptions.BitmapScalingMode="HighQuality"/>
                             <TextBlock Text="Добавить"
-                                       FontSize="36" Height="57"/>
+                                       FontSize="36" Height="57"
+                                       Foreground="{DynamicResource ForegroundBrush}"/>
                         </StackPanel>
                     </Button>
 
@@ -93,9 +93,9 @@
                     Background="{DynamicResource SecondBackgroundBrush}">
 
                 <ScrollViewer VerticalScrollBarVisibility="Auto"
-                  HorizontalScrollBarVisibility="Disabled"
-                  Style="{StaticResource ModernScrollViewer}"
-                  Margin="40,80,40,75">
+                              HorizontalScrollBarVisibility="Disabled"
+                              Style="{StaticResource ModernScrollViewer}"
+                              Margin="40,80,40,75">
 
                     <ItemsControl ItemsSource="{Binding Buttons}">
                         <ItemsControl.ItemsPanel>
@@ -124,8 +124,12 @@
                             <DataTemplate>
                                 <Button Content="{Binding Name}"
                                         Style="{StaticResource RoundedButton}"
+                                        Command="{Binding DataContext.OpenGraphEditorCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}"
                                         Height="100"
-                                        Margin="5"/>
+                                        Margin="5"
+                                        FontSize="24"
+                                        Foreground="{DynamicResource ForegroundBrush}"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
@@ -140,18 +144,14 @@
                     Style="{StaticResource RoundedButton}"
                     Margin="5"
                     Padding="10,5"
-                    Grid.Column="3"/>
+                    Grid.Column="3"
+                    Foreground="{DynamicResource ForegroundBrush}"/>
 
             <ToggleButton Style="{StaticResource SwitchToggleButtonStyle}"
                           Width="60" Height="30"
                           IsChecked="{Binding IsLight, Mode=TwoWay}"
                           Grid.Row="0"
                           Grid.Column="5"/>
-
         </Grid>
     </Border>
-
 </Window>
-
-
-        

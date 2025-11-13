@@ -7,7 +7,12 @@ namespace ThesisCourse_4.MVVM.Views
     public partial class Welcome : Window
     {
 
-        public Welcome() => InitializeComponent();
+        public Welcome()
+        {
+            InitializeComponent();
+            PreviewMouseDoubleClick += OnPreviewMouseDoubleClick;
+            PreviewMouseLeftButtonDown += OnPreviewMouseLeftButtonDown;
+        }
 
 
         #region Window Drag & Resize
@@ -47,40 +52,12 @@ namespace ThesisCourse_4.MVVM.Views
                 e.Handled = true;
             }
         }
+
+        private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+
+        }
         #endregion
 
-        //#region Scroll Handling
-        //private void OnScrollViewerMouseWheel(object sender, MouseWheelEventArgs e)
-        //{
-        //    if (sender is ScrollViewer scrollViewer)
-        //    {
-        //        const double scrollSpeedFactor = 2.75;
-        //        e.Handled = true;
-        //        scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta * scrollSpeedFactor / 3);
-        //    }
-        //}
-        //#endregion
-
-        //private void AddButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    string name = GraphNameTextBox.Text;
-        //    if (string.IsNullOrWhiteSpace(name) || name == "Введите название для графа")
-        //    {
-        //        MessageBox.Show("Вы не ввели название для графа");
-        //        return;
-        //    }
-
-        //    _viewModel.AddButton(name);
-
-        //    GraphNameTextBox.Text = "";
-        //    GraphNameTextBox.Foreground = Brushes.Gray;
-        //    GraphNameTextBox.Tag = "Введите название для графа";
-        //}
-
-        //protected override void OnClosed(EventArgs e)
-        //{
-        //    _viewModel.SaveButtons();
-        //    base.OnClosed(e);
-        //}
     }
 }

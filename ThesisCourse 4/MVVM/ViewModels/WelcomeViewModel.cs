@@ -1,5 +1,4 @@
-﻿// ThesisCourse_4/MVVM/ViewModels/WelcomeViewModel.cs
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ThesisCourse_4.MVVM.Commands;
 using ThesisCourse_4.MVVM.Models;
@@ -14,8 +13,13 @@ namespace ThesisCourse_4.MVVM.ViewModels
 
         public ICommand AddGraphCommand { get; }
         public ICommand OpenAuthWindowCommand { get; }
+        public ICommand OpenGraphEditorCommand { get; }
 
         private string _graphName = string.Empty;
+
+        public ObservableCollection<ButtonModel> Buttons { get; } = new();
+        private GridState _gridState = new() { RowCount = 3 };
+
         public string GraphName
         {
             get => _graphName;
@@ -26,19 +30,13 @@ namespace ThesisCourse_4.MVVM.ViewModels
             }
         }
 
-        public ObservableCollection<CustomButton> Buttons { get; } = new();
-        private GridState _gridState = new() { RowCount = 3 };
         public GridState GridState
         {
             get => _gridState;
             private set => SetProperty(ref _gridState, value);
         }
 
-        public WelcomeViewModel(
-            IThemeService themeService,
-            IStorageService storageService,
-            INavigationService navigationService)
-            : base(themeService)
+        public WelcomeViewModel(IThemeService themeService, IStorageService storageService, INavigationService navigationService) : base(themeService)
         {
             _storageService = storageService;
             _navigationService = navigationService;
@@ -53,6 +51,7 @@ namespace ThesisCourse_4.MVVM.ViewModels
 
             AddGraphCommand = new RelayCommand(OnAddGraph, CanAddGraph);
             OpenAuthWindowCommand = new RelayCommand(OnOpenAuthWindow);
+            OpenGraphEditorCommand = new RelayCommand<ButtonModel>(OpenGraphEditor);
         }
 
         private void OnAddGraph()
@@ -63,7 +62,7 @@ namespace ThesisCourse_4.MVVM.ViewModels
             int row = index / 3;
             int col = (index % 3) * 2;
 
-            var btn = new CustomButton
+            var btn = new ButtonModel
             {
                 Name = GraphName.Trim(),
                 Row = row,
@@ -95,7 +94,11 @@ namespace ThesisCourse_4.MVVM.ViewModels
 
         private bool CanAddGraph() => !string.IsNullOrWhiteSpace(GraphName);
 
-        private void OnOpenAuthWindow() =>
-            _navigationService.ShowWindow<SmallAuthViewModel>();
+        private void OnOpenAuthWindow() => _navigationService.ShowWindow<SmallAuthViewModel>();
+        private void OpenGraphEditor(ButtonModel button)
+        {
+            var title = button.Name;
+            _navigationService.ShowWindow<GraphEditorViewModel>(title);
+        }
     }
 }

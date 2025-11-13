@@ -8,7 +8,8 @@ namespace ThesisCourse_4
 {
     public partial class App : Application
     {
-        private IServiceProvider _serviceProvider;
+        private IServiceProvider? _serviceProvider;
+        public static ThemeService? ThemeService { get; private set; }
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -22,10 +23,12 @@ namespace ThesisCourse_4
             // ViewModels
             services.AddTransient<WelcomeViewModel>();
             services.AddTransient<SmallAuthViewModel>();
+            services.AddTransient<GraphEditorViewModel>();
 
             // Views (если понадобится в NavigationService)
             services.AddTransient<Welcome>();
             services.AddTransient<SmallAuthWind>();
+            services.AddTransient<GraphEditorWindow>();
 
             _serviceProvider = services.BuildServiceProvider();
 
@@ -35,6 +38,7 @@ namespace ThesisCourse_4
             mainWindow.Show();
 
             base.OnStartup(e);
+            ThemeService = new ThemeService();
         }
     }
 }

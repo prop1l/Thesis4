@@ -14,6 +14,7 @@ namespace ThesisCourse_4.Services
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private bool _isLight = true;
+        
         public bool IsLight
         {
             get => _isLight;

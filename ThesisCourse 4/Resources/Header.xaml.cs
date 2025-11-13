@@ -1,18 +1,12 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace ThesisCourse_4.Resources
 {
     public partial class Header : UserControl
     {
-        public Header()
-        {
-            InitializeComponent();
-        }
-
-
+        public Header() => InitializeComponent();
 
         private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e){}
 
@@ -27,5 +21,6 @@ namespace ThesisCourse_4.Resources
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e) => Window.GetWindow(this)?.Close();
+
     }
 }

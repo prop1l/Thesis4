@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace ThesisCourse_4.MVVM.Models
 {
-    public class CustomButton : INotifyPropertyChanged
+    public class ButtonModel : INotifyPropertyChanged
     {
         private string _name = string.Empty;
         public string Name
@@ -17,7 +17,7 @@ namespace ThesisCourse_4.MVVM.Models
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return false;
             field = value;
@@ -27,10 +27,10 @@ namespace ThesisCourse_4.MVVM.Models
 
         public override string ToString() => $"{Name}|{Row}|{Column}";
 
-        public static CustomButton FromString(string line)
+        public static ButtonModel FromString(string line)
         {
             var parts = line.Split('|');
-            return new CustomButton
+            return new ButtonModel
             {
                 Name = parts[0],
                 Row = int.Parse(parts[1]),

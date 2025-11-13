@@ -2,7 +2,6 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using ThesisCourse_4.Services;
 using ThesisCourse_4.MVVM.ViewModels;
 
 namespace ThesisCourse_4.MVVM.Views
@@ -12,21 +11,28 @@ namespace ThesisCourse_4.MVVM.Views
         public SmallAuthWind()
         {
             InitializeComponent();
-            DataContext = new SmallAuthViewModel(new ThemeService());
+            DataContext = new SmallAuthViewModel(themeService: App.ThemeService);
         }
+
+        #region Window Drag & Resize
 
         private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
         }
 
+        #endregion
+
+        #region Placeholder Logic
+
         private void LoginFocus(object sender, RoutedEventArgs e)
         {
-            var loginTextBox = sender as TextBox;
-            loginTextBox.Foreground = Brushes.Black;
+            if (sender is TextBox loginTextBox) loginTextBox.Foreground = Brushes.Black;
         }
 
+        #endregion
 
+        // TODO: Make DB & do login with API (Make API)
         private async void OnLoginButtonClick(object sender, RoutedEventArgs e)
         {
             string login = Login.Text;

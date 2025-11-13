@@ -8,6 +8,8 @@ namespace ThesisCourse_4.Services
     public interface INavigationService
     {
         void ShowWindow<TViewModel>() where TViewModel : class;
+        void ShowWindow<TViewModel>(object parameter) where TViewModel : class;
+
         void CloseCurrent();
     }
 
@@ -35,6 +37,31 @@ namespace ThesisCourse_4.Services
             window.DataContext = viewModel;
             window.Show();
         }
+
+        public void ShowWindow<TViewModel>(object parameter) where TViewModel : class
+        {
+            var vmType = typeof(TViewModel);
+            Type viewType = vmType switch
+            {
+                _ when vmType == typeof(WelcomeViewModel) => typeof(Welcome),
+                _ when vmType == typeof(SmallAuthViewModel) => typeof(SmallAuthWind),
+                _ when vmType == typeof(GraphEditorViewModel) => typeof(GraphEditorWindow),
+                _ => throw new ArgumentException($"Не найдено окно для {vmType.Name}")
+            };
+
+            var window = (Window)ActivatorUtilities.CreateInstance(_serviceProvider, viewType);
+            var viewModel = _serviceProvider.GetRequiredService(vmType);
+
+            window.DataContext = viewModel;
+
+            if (parameter is string title && !string.IsNullOrWhiteSpace(title))
+            {
+                window.Title = title;
+            }
+
+            window.Show();
+        }
+
 
         public void CloseCurrent()
         {

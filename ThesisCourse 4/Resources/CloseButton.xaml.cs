@@ -5,15 +5,8 @@ namespace ThesisCourse_4.Resources
 {
     public partial class CloseButton : UserControl
     {
-        public CloseButton()
-        {
-            InitializeComponent();
-        }
+        public CloseButton() => InitializeComponent();
 
-        private void CloseClick(object sender, System.Windows.RoutedEventArgs e)
-        {
-            var window = Window.GetWindow(this);
-            window.Close();
-        }
+        private void CloseClick(object sender, RoutedEventArgs e) => Window.GetWindow(this).Close();
     }
 }

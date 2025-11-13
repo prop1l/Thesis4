@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Text;
 using ThesisCourse_4.MVVM.Models;
@@ -9,8 +7,8 @@ namespace ThesisCourse_4.Services
 {
     public interface IStorageService
     {
-        IReadOnlyList<CustomButton> LoadButtons();
-        void SaveButtons(IEnumerable<CustomButton> buttons);
+        IReadOnlyList<ButtonModel> LoadButtons();
+        void SaveButtons(IEnumerable<ButtonModel> buttons);
     }
 
     public class FileStorageService : IStorageService
@@ -25,28 +23,28 @@ namespace ThesisCourse_4.Services
             _filePath = Path.Combine(folder, "buttons.txt");
         }
 
-        public IReadOnlyList<CustomButton> LoadButtons()
+        public IReadOnlyList<ButtonModel> LoadButtons()
         {
             if (!File.Exists(_filePath))
-                return Array.Empty<CustomButton>();
+                return Array.Empty<ButtonModel>();
 
             try
             {
                 var lines = File.ReadAllLines(_filePath, Encoding.UTF8);
                 return lines
                     .Where(line => !string.IsNullOrWhiteSpace(line))
-                    .Select(CustomButton.FromString)
+                    .Select(ButtonModel.FromString)
                     .ToList()
                     .AsReadOnly();
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"[FileStorage] Ошибка загрузки: {ex.Message}");
-                return Array.Empty<CustomButton>();
+                return Array.Empty<ButtonModel>();
             }
         }
 
-        public void SaveButtons(IEnumerable<CustomButton> buttons)
+        public void SaveButtons(IEnumerable<ButtonModel> buttons)
         {
             try
             {

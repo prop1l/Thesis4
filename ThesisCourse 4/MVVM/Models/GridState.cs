@@ -1,5 +1,4 @@
-﻿// ThesisCourse_4/MVVM/Models/GridState.cs
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace ThesisCourse_4.MVVM.Models
