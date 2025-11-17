@@ -28,13 +28,13 @@
 
             <ctrl:CloseButton Height="26"/>
 
-            <!-- <ToggleButton Style="{StaticResource SwitchToggleButtonStyle}"
+            <ToggleButton Style="{StaticResource SwitchToggleButtonStyle}"
                           Width="60" Height="30"
                           IsChecked="{Binding IsLight, Mode=TwoWay}"
                           Content="{Binding IsLight}"
                           HorizontalAlignment="Right"
                           VerticalAlignment="Top"
-                          Margin="10"/> -->
+                          Margin="10"/>
 
             <TextBlock Text="Авторизация"
                        Foreground="{DynamicResource ForegroundBrush}"

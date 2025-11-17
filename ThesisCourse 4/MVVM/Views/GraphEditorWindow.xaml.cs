@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -20,10 +19,46 @@ namespace ThesisCourse_4.MVVM.Views
         private Line? previewEdgeLine = null;
         private Ellipse? draggedEdgeEllipse = null;
 
-        public GraphEditorWindow()
+        public GraphEditorWindow() => InitializeComponent();
+
+        #region Window Drag & Resize
+        private bool IsClickInHeaderButNotButtons(object source)
         {
-            InitializeComponent();
+            var current = source as DependencyObject;
+            while (current != null)
+            {
+                if (current is FrameworkElement fe)
+                {
+                    if (fe.Name is "MinimizeButton" or "MaximizeButton" or "CloseButton")
+                        return false;
+                    if (fe.GetType().Name == "Header")
+                        return true;
+                }
+                current = VisualTreeHelper.GetParent(current) as FrameworkElement;
+            }
+            return false;
         }
+
+        private void OnPreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (IsClickInHeaderButNotButtons(e.OriginalSource))
+            {
+                WindowState = WindowState == WindowState.Maximized
+                    ? WindowState.Normal
+                    : WindowState.Maximized;
+                e.Handled = true;
+            }
+        }
+
+        private void OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (IsClickInHeaderButNotButtons(e.OriginalSource) && WindowState == WindowState.Normal)
+            {
+                DragMove();
+                e.Handled = true;
+            }
+        }
+        #endregion
 
         private GraphEditorViewModel GetViewModel() =>
             DataContext as GraphEditorViewModel ?? throw new InvalidOperationException("DataContext должен быть GraphEditorViewModel");

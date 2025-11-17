@@ -30,7 +30,7 @@ namespace ThesisCourse_4.MVVM.ViewModels
             Nodes.Add(new Node
             {
                 Id = nodeCounter,
-                Label = $"Node {nodeCounter + 1}",
+                Label = $"Node {nodeCounter}",
                 X = 100 + 70 * nodeCounter,
                 Y = 100
             });

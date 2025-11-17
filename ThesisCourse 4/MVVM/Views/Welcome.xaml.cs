@@ -52,12 +52,6 @@ namespace ThesisCourse_4.MVVM.Views
                 e.Handled = true;
             }
         }
-
-        private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-
-        }
         #endregion
-
     }
 }
