@@ -30,6 +30,7 @@ namespace ThesisCourse_4.MVVM.Views
             InitializeComponent();
             PreviewMouseDoubleClick += OnPreviewMouseDoubleClick;
             PreviewMouseLeftButtonDown += OnPreviewMouseLeftButtonDown;
+            Closing += GraphEditorWindow_Closing;
         }
 
         #endregion
@@ -49,6 +50,11 @@ namespace ThesisCourse_4.MVVM.Views
                 current = VisualTreeHelper.GetParent(current) as FrameworkElement;
             }
             return false;
+        }
+
+        private void GraphEditorWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (DataContext is GraphEditorViewModel vm) vm.SaveGraph();
         }
 
         private void OnPreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -95,16 +101,19 @@ namespace ThesisCourse_4.MVVM.Views
         private void Ellipse_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             draggedNodeEllipse = sender as Ellipse;
-            if (draggedNodeEllipse != null)
+            if (draggedNodeEllipse == null)
+                return;
+
+            var canvas = FindParentCanvas(draggedNodeEllipse);
+            if (canvas == null)
+                return;
+
+            if (draggedNodeEllipse.DataContext is Node node)
             {
-                isDraggingNode = true;
-                var canvas = FindParentCanvas(draggedNodeEllipse);
-                if (canvas == null) return;
-
                 var pos = e.GetPosition(canvas);
-                if (draggedNodeEllipse.DataContext is Node node)
-                    mouseOffsetNode = new Point(pos.X - node.X, pos.Y - node.Y);
+                mouseOffsetNode = new Point(pos.X - node.X, pos.Y - node.Y);
 
+                isDraggingNode = true;
                 draggedNodeEllipse.CaptureMouse();
                 e.Handled = true;
             }
@@ -115,7 +124,8 @@ namespace ThesisCourse_4.MVVM.Views
             if (isDraggingNode && draggedNodeEllipse != null && draggedNodeEllipse.IsMouseCaptured && e.LeftButton == MouseButtonState.Pressed)
             {
                 var canvas = FindParentCanvas(draggedNodeEllipse);
-                if (canvas == null) return;
+                if (canvas == null)
+                    return;
 
                 var pos = e.GetPosition(canvas);
                 if (draggedNodeEllipse.DataContext is Node node)
@@ -129,7 +139,8 @@ namespace ThesisCourse_4.MVVM.Views
             if (isDraggingEdge && previewEdgeLine != null)
             {
                 var canvas = FindParentCanvas(draggedEdgeEllipse);
-                if (canvas == null) return;
+                if (canvas == null)
+                    return;
 
                 var pos = e.GetPosition(canvas);
                 previewEdgeLine.X2 = pos.X;
@@ -143,15 +154,18 @@ namespace ThesisCourse_4.MVVM.Views
             if (isDraggingNode && draggedNodeEllipse != null)
             {
                 var canvas = FindParentCanvas(draggedNodeEllipse);
-                if (canvas == null) return;
+                if (canvas == null)
+                    return;
 
                 var pos = e.GetPosition(TrashCanvas);
                 if (pos.X >= 0 && pos.X <= TrashCanvas.ActualWidth && pos.Y >= 0 && pos.Y <= TrashCanvas.ActualHeight)
+                {
                     if (draggedNodeEllipse.DataContext is Node node)
                     {
                         var vm = GetViewModel();
                         vm.RemoveNode(node);
                     }
+                }
 
                 draggedNodeEllipse.ReleaseMouseCapture();
                 isDraggingNode = false;
@@ -160,36 +174,31 @@ namespace ThesisCourse_4.MVVM.Views
             }
         }
 
-
         #endregion
 
         #region Edge Dragging Logic
 
         private void Ellipse_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            draggedEdgeEllipse = sender as Ellipse;
-            if (draggedEdgeEllipse == null) return;
+            if ((draggedEdgeEllipse = sender as Ellipse) == null ||
+                FindParentCanvas(draggedEdgeEllipse) is not Canvas canvas ||
+                draggedEdgeEllipse.DataContext is not Node node)
+                return;
 
-            var canvas = FindParentCanvas(draggedEdgeEllipse);
-            if (canvas == null) return;
+            edgeStartNode = node;
+            isDraggingEdge = true;
 
-            if (draggedEdgeEllipse.DataContext is Node node)
+            var pos = e.GetPosition(canvas);
+            previewEdgeLine = new Line
             {
-                edgeStartNode = node;
-                isDraggingEdge = true;
-
-                var pos = e.GetPosition(canvas);
-                previewEdgeLine = new Line()
-                {
-                    Stroke = Brushes.Gray,
-                    StrokeThickness = 2,
-                    X1 = node.X + 30,
-                    Y1 = node.Y + 30,
-                    X2 = pos.X,
-                    Y2 = pos.Y
-                };
-                PreviewCanvas.Children.Add(previewEdgeLine);
-            }
+                Stroke = Brushes.Gray,
+                StrokeThickness = 2,
+                X1 = node.CenterX,
+                Y1 = node.CenterY,
+                X2 = pos.X,
+                Y2 = pos.Y
+            };
+            PreviewCanvas.Children.Add(previewEdgeLine);
             draggedEdgeEllipse.CaptureMouse();
             e.Handled = true;
         }
@@ -199,40 +208,25 @@ namespace ThesisCourse_4.MVVM.Views
             var canvas = FindParentCanvas(draggedEdgeEllipse);
             if (canvas == null) return;
 
-            var pos = e.GetPosition(canvas);
-
-            HitTestResult hitResult = VisualTreeHelper.HitTest(canvas, pos);
-            if (hitResult != null)
+            if (VisualTreeHelper.HitTest(canvas, e.GetPosition(canvas))?.VisualHit is Ellipse ellipse &&
+                ellipse.DataContext is Node endNode &&
+                edgeStartNode != null &&
+                edgeStartNode.Id != endNode.Id)
             {
-                DependencyObject element = hitResult.VisualHit;
-                while (element != null && !(element is Ellipse)) element = VisualTreeHelper.GetParent(element);
-
-                if (element is Ellipse ellipse && ellipse.DataContext is Node endNode)
-                {
-                    if (edgeStartNode != null && edgeStartNode.Id != endNode.Id)
-                    {
-                        var vm = GetViewModel();
-                        vm.AddEdgeByIds(edgeStartNode.Id, endNode.Id);
-                    }
-                }
-            }
-            if (previewEdgeLine != null)
-            {
-                PreviewCanvas.Children.Remove(previewEdgeLine);
-                previewEdgeLine = null;
+                GetViewModel().AddEdgeByIds(edgeStartNode.Id, endNode.Id);
             }
 
-            if (draggedEdgeEllipse != null)
-            {
-                draggedEdgeEllipse.ReleaseMouseCapture();
-                draggedEdgeEllipse = null;
-            }
+            PreviewCanvas.Children.Remove(previewEdgeLine);
+            draggedEdgeEllipse?.ReleaseMouseCapture();
 
+            previewEdgeLine = null;
+            draggedEdgeEllipse = null;
             isDraggingEdge = false;
             edgeStartNode = null;
 
             e.Handled = true;
         }
+
 
         #endregion
     }

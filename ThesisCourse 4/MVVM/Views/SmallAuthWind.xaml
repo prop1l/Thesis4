@@ -63,10 +63,10 @@
                 <i:Interaction.Behaviors>
                     <behaviors:PasswordBoxPlaceholderBehavior/>
                 </i:Interaction.Behaviors>
-
+                
             </PasswordBox>
-            
-            
+
+
             <Button Content="Войти"
                     Style="{StaticResource RoundedButton}"
                     Width="180"
@@ -82,10 +82,8 @@
                    FontFamily="Fonts/Montserrat-Regular.ttf"/>
 
         </StackPanel>
-
         <Border.Effect>
             <DropShadowEffect Opacity=".223"/>
         </Border.Effect>
-
     </Border>
 </Window>

@@ -1,13 +1,14 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
-using System.Windows.Input;
-using ThesisCourse_4.MVVM.Models;
-using ThesisCourse_4.MVVM.Commands;
-using ThesisCourse_4.MVVM.Views;
 using System.Windows;
+using System.Windows.Input;
+using ThesisCourse_4.MVVM.Commands;
+using ThesisCourse_4.MVVM.Models;
+using ThesisCourse_4.MVVM.Views;
 
 namespace ThesisCourse_4.MVVM.ViewModels
 {
@@ -15,10 +16,11 @@ namespace ThesisCourse_4.MVVM.ViewModels
     {
         #region Fields
 
-        private int nodeCounter = 1;
+        private int nodeCnt = 1;
         private int heightCnt = 0;
         private int widthCnt = 0;
         private int nodeIdToRemove;
+        private string? _graphFilePath;
 
         #endregion
 
@@ -47,7 +49,12 @@ namespace ThesisCourse_4.MVVM.ViewModels
         public GraphEditorViewModel()
         {
             AddNodeCommand = new RelayCommand(AddNode);
-            SaveCommand = new RelayCommand(SaveGraph);
+            SaveCommand = new RelayCommand(() =>
+            {
+                if (string.IsNullOrEmpty(_graphFilePath))
+                    return;
+                SaveGraph();
+            });
             RemoveNodeCommand = new RelayCommand<Node>(RemoveNode);
             RemoveNodeByIdCommand = new RelayCommand<int>(RemoveNodeById);
             RemoveAllCommand = new RelayCommand(RemoveAll);
@@ -58,30 +65,128 @@ namespace ThesisCourse_4.MVVM.ViewModels
 
         #region Methods
 
+        public void SetGraphFileName(string fileName)
+        {
+            string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string folder = Path.Combine(appData, "ThesisCourse_4");
+            Directory.CreateDirectory(folder);
+            _graphFilePath = Path.Combine(folder, fileName + ".json");
+
+            LoadGraph();
+        }
+
+        private class GraphData
+        {
+            public List<Node> Nodes { get; set; } = new();
+            public List<Edge> Edges { get; set; } = new();
+        }
+
+        public void SaveGraph()
+        {
+            if (string.IsNullOrEmpty(_graphFilePath))
+                throw new InvalidOperationException("Graph file path is not set.");
+
+            try
+            {
+                var saveModel = new
+                {
+                    Nodes = this.Nodes.ToList(),
+                    Edges = this.Edges.ToList()
+                };
+
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                string json = JsonSerializer.Serialize(saveModel, options);
+                File.WriteAllText(_graphFilePath, json);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Ошибка при сохранении графа: {ex.Message}");
+            }
+        }
+
+        public void LoadGraph()
+        {
+            if (string.IsNullOrEmpty(_graphFilePath))
+                return;
+
+            try
+            {
+                if (!File.Exists(_graphFilePath))
+                {
+                    nodeCnt = 1;
+                    heightCnt = 0;
+                    widthCnt = 0;
+                    return;
+                }
+
+                string json = File.ReadAllText(_graphFilePath);
+                var loaded = JsonSerializer.Deserialize<GraphData>(json);
+
+                if (loaded != null)
+                {
+                    Nodes.Clear();
+                    foreach (var node in loaded.Nodes)
+                        Nodes.Add(node);
+
+                    Edges.Clear();
+                    foreach (var edge in loaded.Edges)
+                        Edges.Add(edge);
+
+                    ReconnectEdgesToNodes();
+
+                    if (Nodes.Count > 0)
+                    {
+                        nodeCnt = Nodes.Max(n => n.Id) + 1;
+                    }
+                    else
+                    {
+                        nodeCnt = 1;
+                    }
+
+                    int nodeCount = Nodes.Count;
+                    widthCnt = nodeCount / 6;
+                    heightCnt = nodeCount % 6;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Ошибка при загрузке графа: {ex.Message}");
+                nodeCnt = 1;
+                heightCnt = 0;
+                widthCnt = 0;
+            }
+        }
+
+        private void ReconnectEdgesToNodes()
+        {
+            foreach (var edge in Edges)
+            {
+                var fromNode = Nodes.FirstOrDefault(n => n.Id == edge.FromNodeId);
+                var toNode = Nodes.FirstOrDefault(n => n.Id == edge.ToNodeId);
+
+                edge.FromNode = fromNode;
+                edge.ToNode = toNode;
+            }
+        }
+
+
         private void AddNode()
         {
             if ((heightCnt + 1) % 6 == 0)
             {
                 widthCnt++;
-                heightCnt /= 6;
+                heightCnt = 0;
             }
 
             Nodes.Add(new Node
             {
-                Id = nodeCounter,
-                Label = $"{nodeCounter}",
+                Id = nodeCnt,
+                Label = $"{nodeCnt}",
                 X = 100 + 70 * heightCnt,
                 Y = 100 + 70 * widthCnt
             });
-            nodeCounter++;
+            nodeCnt++;
             heightCnt++;
-        }
-
-        private void SaveGraph()
-        {
-            var graph = new { Nodes, Edges };
-            var json = JsonSerializer.Serialize(graph, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText("graph.json", json);
         }
 
         public void AddEdgeByIds(int fromId, int toId)
@@ -132,7 +237,7 @@ namespace ThesisCourse_4.MVVM.ViewModels
         {
             Nodes.Clear();
             Edges.Clear();
-            nodeCounter = 1;
+            nodeCnt = 1;
             heightCnt = 0;
             widthCnt = 0;
         }
@@ -157,9 +262,6 @@ namespace ThesisCourse_4.MVVM.ViewModels
 
             return matrix;
         }
-
-
-
 
         private void OpenMatrixWindow()
         {

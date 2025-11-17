@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Windows;
 using ThesisCourse_4.MVVM.ViewModels;
 using ThesisCourse_4.MVVM.Views;
@@ -7,9 +8,8 @@ namespace ThesisCourse_4.Services
 {
     public interface INavigationService
     {
-        void ShowWindow<TViewModel>() where TViewModel : class;
-        void ShowWindow<TViewModel>(object parameter) where TViewModel : class;
-
+        TViewModel ShowWindow<TViewModel>() where TViewModel : class;
+        TViewModel ShowWindow<TViewModel>(object parameter) where TViewModel : class;
         void CloseCurrent();
     }
 
@@ -22,7 +22,7 @@ namespace ThesisCourse_4.Services
             _serviceProvider = serviceProvider;
         }
 
-        public void ShowWindow<TViewModel>() where TViewModel : class
+        public TViewModel ShowWindow<TViewModel>() where TViewModel : class
         {
             var vmType = typeof(TViewModel);
             Type viewType = vmType switch
@@ -36,9 +36,10 @@ namespace ThesisCourse_4.Services
             var viewModel = _serviceProvider.GetRequiredService(vmType);
             window.DataContext = viewModel;
             window.Show();
+            return (TViewModel)viewModel;
         }
 
-        public void ShowWindow<TViewModel>(object parameter) where TViewModel : class
+        public TViewModel ShowWindow<TViewModel>(object parameter) where TViewModel : class
         {
             var vmType = typeof(TViewModel);
             Type viewType = vmType switch
@@ -57,11 +58,14 @@ namespace ThesisCourse_4.Services
             if (parameter is string title && !string.IsNullOrWhiteSpace(title))
             {
                 window.Title = title;
+
+                if (viewModel is GraphEditorViewModel graphVm)
+                    graphVm.SetGraphFileName(title);
             }
 
             window.Show();
+            return (TViewModel)viewModel;
         }
-
 
         public void CloseCurrent()
         {
@@ -70,4 +74,3 @@ namespace ThesisCourse_4.Services
         }
     }
 }
-

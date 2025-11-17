@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using ThesisCourse_4.MVVM.Models;
 
 namespace ThesisCourse_4.MVVM.Views
 {
@@ -37,9 +38,7 @@ namespace ThesisCourse_4.MVVM.Views
         {
             if (IsClickInHeaderButNotButtons(e.OriginalSource))
             {
-                WindowState = WindowState == WindowState.Maximized
-                    ? WindowState.Normal
-                    : WindowState.Maximized;
+                WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
                 e.Handled = true;
             }
         }

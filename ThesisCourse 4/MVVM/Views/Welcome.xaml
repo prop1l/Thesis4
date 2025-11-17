@@ -82,7 +82,6 @@
                                        Foreground="{DynamicResource ForegroundBrush}"/>
                         </StackPanel>
                     </Button>
-
                 </Grid>
             </Border>
 
@@ -133,7 +132,6 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-
                 </ScrollViewer>
             </Border>
 

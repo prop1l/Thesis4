@@ -5,74 +5,104 @@ namespace ThesisCourse_4.MVVM.Models
 {
     public class Node : INotifyPropertyChanged
     {
-        private double x;
-        private double y;
-        public double CenterX => X + 30;
-        public double CenterY => Y + 30;
+        private int _id;
+        private string _label = string.Empty;
+        private double _x;
+        private double _y;
 
-        public int Id { get; set; }
-        public string Label { get; set; }
+        public int Id
+        {
+            get => _id;
+            set { if (_id != value) { _id = value; OnPropertyChanged(); } }
+        }
+
+        public string Label
+        {
+            get => _label;
+            set { if (_label != value) { _label = value; OnPropertyChanged(); } }
+        }
 
         public double X
         {
-            get => x;
-            set { x = value; OnPropertyChanged(); }
+            get => _x;
+            set { if (_x != value) { _x = value; OnPropertyChanged(); OnPropertyChanged(nameof(CenterX)); } }
         }
 
         public double Y
         {
-            get => y;
-            set { y = value; OnPropertyChanged(); }
+            get => _y;
+            set { if (_y != value) { _y = value; OnPropertyChanged(); OnPropertyChanged(nameof(CenterY)); } }
         }
+
+        public double CenterX => X + 30;
+        public double CenterY => Y + 30;
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
     public class Edge : INotifyPropertyChanged
     {
-        public int FromNodeId { get; set; }
-        public int ToNodeId { get; set; }
+        private int _fromNodeId;
+        private int _toNodeId;
+        private Node? _fromNode;
+        private Node? _toNode;
 
-        private Node? fromNode;
+        public int FromNodeId
+        {
+            get => _fromNodeId;
+            set { if (_fromNodeId != value) { _fromNodeId = value; OnPropertyChanged(); } }
+        }
+
+        public int ToNodeId
+        {
+            get => _toNodeId;
+            set { if (_toNodeId != value) { _toNodeId = value; OnPropertyChanged(); } }
+        }
+
         public Node? FromNode
         {
-            get => fromNode;
+            get => _fromNode;
             set
             {
-                if (fromNode != null)
-                    fromNode.PropertyChanged -= Node_PropertyChanged;
+                if (_fromNode != null)
+                    _fromNode.PropertyChanged -= Node_PropertyChanged;
 
-                fromNode = value;
+                if (_fromNode != value)
+                {
+                    _fromNode = value;
+                    OnPropertyChanged();
+                }
 
-                if (fromNode != null)
-                    fromNode.PropertyChanged += Node_PropertyChanged;
-
-                OnPropertyChanged();
+                if (_fromNode != null)
+                    _fromNode.PropertyChanged += Node_PropertyChanged;
             }
         }
 
-        private Node? toNode;
         public Node? ToNode
         {
-            get => toNode;
+            get => _toNode;
             set
             {
-                if (toNode != null)
-                    toNode.PropertyChanged -= Node_PropertyChanged;
+                if (_toNode != null)
+                    _toNode.PropertyChanged -= Node_PropertyChanged;
 
-                toNode = value;
+                if (_toNode != value)
+                {
+                    _toNode = value;
+                    OnPropertyChanged();
+                }
 
-                if (toNode != null)
-                    toNode.PropertyChanged += Node_PropertyChanged;
-
-                OnPropertyChanged();
+                if (_toNode != null)
+                    _toNode.PropertyChanged += Node_PropertyChanged;
             }
         }
 
         private void Node_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(Node.X) || e.PropertyName == nameof(Node.Y))
+            if (e.PropertyName == nameof(Node.X) || e.PropertyName == nameof(Node.Y) ||
+                e.PropertyName == nameof(Node.CenterX) || e.PropertyName == nameof(Node.CenterY))
             {
                 OnPropertyChanged(nameof(FromNode));
                 OnPropertyChanged(nameof(ToNode));
@@ -80,7 +110,7 @@ namespace ThesisCourse_4.MVVM.Models
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string? propName = null) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

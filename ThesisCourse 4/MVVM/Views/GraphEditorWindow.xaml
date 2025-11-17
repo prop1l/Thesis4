@@ -3,8 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ctrl="clr-namespace:ThesisCourse_4.Resources"
         Title="Graph Editor"
+        
         Width="1000" Height="800"
         MinHeight="500" MinWidth="700" 
+        
         Background="{DynamicResource BackgroundBrush}"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResize"
@@ -77,8 +79,6 @@
                                                HorizontalAlignment="Center"
                                                Foreground="{DynamicResource ForegroundBrush}"/>
 
-
-
                                     <!-- <Button Content="X"
                                                 Width="20" Height="20"
                                                 HorizontalAlignment="Right"
@@ -98,7 +98,6 @@
                         <Image Source="/Resources/Icons/free-icon-delete-1214428.png"
                                Width="80" Height="80"/>
                     </Canvas>
-
                 </Grid>
             </DockPanel>
         </Border>
@@ -140,6 +139,7 @@
             </StackPanel>
             
             <StackPanel Grid.Column="2" Orientation="Horizontal">
+                
                 <Button Content="Сохранить" Grid.Column="2"
                     Command="{Binding SaveCommand}" 
                     Style="{StaticResource RoundedButton}"

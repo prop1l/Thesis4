@@ -60,6 +60,7 @@ namespace ThesisCourse_4.MVVM.ViewModels
             OpenGraphEditorCommand = new RelayCommand<ButtonModel>(OpenGraphEditor);
         }
 
+
         #endregion
 
         #region Methods
@@ -101,11 +102,15 @@ namespace ThesisCourse_4.MVVM.ViewModels
         }
 
         private bool CanAddGraph() => !string.IsNullOrWhiteSpace(GraphName);
-
         private void OnOpenAuthWindow() => _navigationService.ShowWindow<SmallAuthViewModel>();
-
-        private void OpenGraphEditor(ButtonModel button) =>
-            _navigationService.ShowWindow<GraphEditorViewModel>(button.Name);
+        private void OpenGraphEditor(ButtonModel button)
+        {
+            var vm = _navigationService.ShowWindow<GraphEditorViewModel>(button.Name);
+            if (vm != null)
+            {
+                vm.SetGraphFileName(button.Name);
+            }
+        }
 
         #endregion
     }
