@@ -11,8 +11,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="MVVM\Views\GraphEditorWindow.xaml~RFc1ddc2.TMP" />
     <None Remove="MVVM\Views\zm4m40pj.1to~" />
+    <None Remove="Resources\Icons\free-icon-delete-1214428.png" />
     <None Remove="Resources\LightTheme.xaml~RF25416b1.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Icons\free-icon-delete-1214428.png" />
   </ItemGroup>
 
   <ItemGroup>

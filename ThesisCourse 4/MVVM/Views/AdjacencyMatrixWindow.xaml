@@ -1,0 +1,55 @@
+﻿<Window x:Class="ThesisCourse_4.MVVM.Views.AdjacencyMatrixWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:ThesisCourse_4.Resources"
+        Title="Матрица смежности"
+        Width="900" Height="600"
+        WindowStyle="None"
+        ResizeMode="CanResize"
+        AllowsTransparency="False"
+        Background="{DynamicResource BackgroundBrush}"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid>
+        <Border Background="{DynamicResource SecondBackgroundBrush}"
+                CornerRadius="20"
+                BorderThickness="2"
+                Padding="36,20,36,28"
+                Margin="28"
+                SnapsToDevicePixels="True">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="60"/>
+                </Grid.RowDefinitions>
+
+                <local:CloseButton Margin="718,20,5,15" RenderTransformOrigin="0.5,0.5"/>
+                <TextBlock Grid.Row="0"
+                           Text="Матрица смежности графа"
+                           FontSize="32"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Center"
+                           Margin="0,10,0,12"
+                           Foreground="{DynamicResource ForegroundBrush}"/>
+
+                <ScrollViewer Grid.Row="1"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto"
+                              Background="Transparent">
+
+                    <DataGrid x:Name="MatrixGrid" Style="{StaticResource AdjacencyMatrixDataGridStyle}"/>
+                </ScrollViewer>
+
+                <Button Grid.Row="2"
+                        Content="Закрыть"
+                        Width="150" Height="40"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="0"
+                        Style="{StaticResource RoundedButton}"
+                        Click="OnCloseClick"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

@@ -10,6 +10,8 @@ namespace ThesisCourse_4.MVVM.Views
 {
     public partial class GraphEditorWindow : Window
     {
+        #region Fields
+
         private bool isDraggingNode = false;
         private Ellipse? draggedNodeEllipse = null;
         private Point mouseOffsetNode;
@@ -19,9 +21,21 @@ namespace ThesisCourse_4.MVVM.Views
         private Line? previewEdgeLine = null;
         private Ellipse? draggedEdgeEllipse = null;
 
-        public GraphEditorWindow() => InitializeComponent();
+        #endregion
 
-        #region Window Drag & Resize
+        #region Constructor
+
+        public GraphEditorWindow()
+        {
+            InitializeComponent();
+            PreviewMouseDoubleClick += OnPreviewMouseDoubleClick;
+            PreviewMouseLeftButtonDown += OnPreviewMouseLeftButtonDown;
+        }
+
+        #endregion
+
+        #region Window Drag and Resize Helpers
+
         private bool IsClickInHeaderButNotButtons(object source)
         {
             var current = source as DependencyObject;
@@ -29,10 +43,8 @@ namespace ThesisCourse_4.MVVM.Views
             {
                 if (current is FrameworkElement fe)
                 {
-                    if (fe.Name is "MinimizeButton" or "MaximizeButton" or "CloseButton")
-                        return false;
-                    if (fe.GetType().Name == "Header")
-                        return true;
+                    if (fe.Name is "MinimizeButton" or "MaximizeButton" or "CloseButton") return false;
+                    if (fe.GetType().Name == "Header") return true;
                 }
                 current = VisualTreeHelper.GetParent(current) as FrameworkElement;
             }
@@ -43,9 +55,7 @@ namespace ThesisCourse_4.MVVM.Views
         {
             if (IsClickInHeaderButNotButtons(e.OriginalSource))
             {
-                WindowState = WindowState == WindowState.Maximized
-                    ? WindowState.Normal
-                    : WindowState.Maximized;
+                WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
                 e.Handled = true;
             }
         }
@@ -58,20 +68,30 @@ namespace ThesisCourse_4.MVVM.Views
                 e.Handled = true;
             }
         }
+
         #endregion
+
+        #region Helpers
 
         private GraphEditorViewModel GetViewModel() =>
             DataContext as GraphEditorViewModel ?? throw new InvalidOperationException("DataContext должен быть GraphEditorViewModel");
 
-        private Canvas? FindParentCanvas(DependencyObject child)
+        private Canvas? FindParentCanvas(DependencyObject? child)
         {
+            if (child == null)
+                return null;
+
             var parent = VisualTreeHelper.GetParent(child);
             while (parent != null && !(parent is Canvas))
                 parent = VisualTreeHelper.GetParent(parent);
             return parent as Canvas;
         }
 
-        // Перетаскиваем узел ЛКМ
+
+        #endregion
+
+        #region Node Dragging Logic
+
         private void Ellipse_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             draggedNodeEllipse = sender as Ellipse;
@@ -83,9 +103,8 @@ namespace ThesisCourse_4.MVVM.Views
 
                 var pos = e.GetPosition(canvas);
                 if (draggedNodeEllipse.DataContext is Node node)
-                {
                     mouseOffsetNode = new Point(pos.X - node.X, pos.Y - node.Y);
-                }
+
                 draggedNodeEllipse.CaptureMouse();
                 e.Handled = true;
             }
@@ -123,6 +142,17 @@ namespace ThesisCourse_4.MVVM.Views
         {
             if (isDraggingNode && draggedNodeEllipse != null)
             {
+                var canvas = FindParentCanvas(draggedNodeEllipse);
+                if (canvas == null) return;
+
+                var pos = e.GetPosition(TrashCanvas);
+                if (pos.X >= 0 && pos.X <= TrashCanvas.ActualWidth && pos.Y >= 0 && pos.Y <= TrashCanvas.ActualHeight)
+                    if (draggedNodeEllipse.DataContext is Node node)
+                    {
+                        var vm = GetViewModel();
+                        vm.RemoveNode(node);
+                    }
+
                 draggedNodeEllipse.ReleaseMouseCapture();
                 isDraggingNode = false;
                 draggedNodeEllipse = null;
@@ -130,7 +160,11 @@ namespace ThesisCourse_4.MVVM.Views
             }
         }
 
-        // Создание ребра перетаскиванием правой кнопки мыши
+
+        #endregion
+
+        #region Edge Dragging Logic
+
         private void Ellipse_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             draggedEdgeEllipse = sender as Ellipse;
@@ -163,8 +197,7 @@ namespace ThesisCourse_4.MVVM.Views
         private void Ellipse_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             var canvas = FindParentCanvas(draggedEdgeEllipse);
-            if (canvas == null)
-                return;
+            if (canvas == null) return;
 
             var pos = e.GetPosition(canvas);
 
@@ -172,8 +205,7 @@ namespace ThesisCourse_4.MVVM.Views
             if (hitResult != null)
             {
                 DependencyObject element = hitResult.VisualHit;
-                while (element != null && !(element is Ellipse))
-                    element = VisualTreeHelper.GetParent(element);
+                while (element != null && !(element is Ellipse)) element = VisualTreeHelper.GetParent(element);
 
                 if (element is Ellipse ellipse && ellipse.DataContext is Node endNode)
                 {
@@ -202,5 +234,7 @@ namespace ThesisCourse_4.MVVM.Views
             e.Handled = true;
         }
 
+        #endregion
     }
+
 }

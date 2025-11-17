@@ -10,7 +10,6 @@ namespace ThesisCourse_4.MVVM.Models
         public double CenterX => X + 30;
         public double CenterY => Y + 30;
 
-
         public int Id { get; set; }
         public string Label { get; set; }
 

@@ -28,12 +28,17 @@
                 <!--    ToggleButtons  -->
                 <ResourceDictionary Source="/Resources/Styles/ToggleButtons/SwitchToggleButtomStyle.xaml"/>
 
-
-                <!--    ScrollViewer  -->
+                <!--    ScrollViewers  -->
                 <ResourceDictionary Source="/Resources/Styles/ScrollViewer/ModernScrollBarStyle.xaml"/>
 
+                <!--    DataGrids  -->
+                <ResourceDictionary Source="/Resources/Styles/DataGrids/AdjacencyMatrixDataGridStyle.xaml"/>
 
-                <ResourceDictionary Source="/Resources/Icon.xaml"/>
+                <!--    Icons  -->
+                <ResourceDictionary Source="/Resources/Icons/Icon.xaml"/>
+                <ResourceDictionary Source="/Resources/Icons/Trash.xaml"/>
+
+                <ResourceDictionary Source="/Resources/DropShadow.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

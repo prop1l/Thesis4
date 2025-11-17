@@ -4,6 +4,7 @@
         xmlns:ctrl="clr-namespace:ThesisCourse_4.Resources"
         Title="Graph Editor"
         Width="1000" Height="800"
+        MinHeight="500" MinWidth="700" 
         Background="{DynamicResource BackgroundBrush}"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResize"
@@ -27,7 +28,8 @@
             <DockPanel>
                 <Grid>
                     <Canvas x:Name="PreviewCanvas" IsHitTestVisible="False"/>
-                    <!-- Edges -->
+
+                    <!-- Узлы -->
                     <ItemsControl ItemsSource="{Binding Edges}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -36,7 +38,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Line Stroke="Black" StrokeThickness="2"
+                                <Line Stroke="{DynamicResource EdgeBrush}" StrokeThickness="2"
                                       X1="{Binding FromNode.CenterX}"
                                       Y1="{Binding FromNode.CenterY}"
                                       X2="{Binding ToNode.CenterX}"
@@ -45,7 +47,7 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
 
-                    <!-- Nodes -->
+                    <!-- Вершины -->
                     <ItemsControl ItemsSource="{Binding Nodes}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -69,33 +71,81 @@
                                              PreviewMouseMove="Ellipse_PreviewMouseMove"
                                              PreviewMouseLeftButtonUp="Ellipse_PreviewMouseLeftButtonUp"
                                              PreviewMouseRightButtonDown="Ellipse_PreviewMouseRightButtonDown"
-                                             PreviewMouseRightButtonUp="Ellipse_PreviewMouseRightButtonUp" />
+                                             PreviewMouseRightButtonUp="Ellipse_PreviewMouseRightButtonUp"/>
                                     <TextBlock Text="{Binding Label}"
+                                               VerticalAlignment="Center"
                                                HorizontalAlignment="Center"
                                                Foreground="{DynamicResource ForegroundBrush}"/>
+
+
+
+                                    <!-- <Button Content="X"
+                                                Width="20" Height="20"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Top"
+                                                Command="{Binding DataContext.RemoveNodeCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding}"/> -->
                                 </StackPanel>
                             </DataTemplate>
-
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
+                    <Canvas x:Name="TrashCanvas"
+                            Width="80" Height="80"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom"
+                            Margin="20,0,0,20"
+                            Panel.ZIndex="99">
+                        <Image Source="/Resources/Icons/free-icon-delete-1214428.png"
+                               Width="80" Height="80"/>
+                    </Canvas>
+
                 </Grid>
             </DockPanel>
         </Border>
 
-        <StackPanel Grid.Row="2"
-                    Orientation="Horizontal">
-            
-            <Button Content="Добавить Узел"
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="130"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal">
+
+                <Button Content="Добавить Узел"
                 Command="{Binding AddNodeCommand}" 
                 Style="{StaticResource RoundedButton}"
                 Margin="5"/>
-            
-            <Button Content="Сохранить" Grid.Row="2"
-                Command="{Binding SaveCommand}" 
-                Style="{StaticResource RoundedButton}"
-                Margin="5"/>
-            
-        </StackPanel>
 
+                <ComboBox Width="100" Margin="5"
+                      ItemsSource="{Binding Nodes}"
+                      SelectedValuePath="Id"
+                      DisplayMemberPath="Label"
+                      SelectedValue="{Binding NodeIdToRemove, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Button Content="Удалить узел"
+                    Command="{Binding RemoveNodeByIdCommand}"
+                    CommandParameter="{Binding NodeIdToRemove}"
+                    Style="{StaticResource RoundedButton}"
+                    Margin="5"/>
+
+                <Button Content="Удалить все"
+                    Command="{Binding RemoveAllCommand}"
+                    Style="{StaticResource RoundedButton}"
+                    Margin="5"/>
+
+                <Button Content="Матрица смежности"
+                        Command="{Binding OpenMatrixCommand}"
+                        Style="{StaticResource RoundedButton}"
+                        Margin="5"/>
+
+            </StackPanel>
+            
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <Button Content="Сохранить" Grid.Column="2"
+                    Command="{Binding SaveCommand}" 
+                    Style="{StaticResource RoundedButton}"
+                    Margin="5"/>
+                
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

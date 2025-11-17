@@ -8,41 +8,26 @@ namespace ThesisCourse_4.MVVM.ViewModels
 {
     public class WelcomeViewModel : ThemedViewModelBase
     {
-        public WelcomeViewModel(IThemeService themeService, IStorageService storageService, INavigationService navigationService) : base(themeService)
-        {
-            _storageService = storageService;
-            _navigationService = navigationService;
-
-            var saved = _storageService.LoadButtons();
-            foreach (var btn in saved)
-            {
-                Buttons.Add(btn);
-            }
-
-            UpdateGridState();
-
-            AddGraphCommand = new RelayCommand(OnAddGraph, CanAddGraph);
-            OpenAuthWindowCommand = new RelayCommand(OnOpenAuthWindow);
-            OpenGraphEditorCommand = new RelayCommand<ButtonModel>(OpenGraphEditor);
-        }
-
+        #region Fields
 
         private readonly IStorageService _storageService;
         private readonly INavigationService _navigationService;
-        public ICommand AddGraphCommand { get; }
-        public ICommand OpenAuthWindowCommand { get; }
-        public ICommand OpenGraphEditorCommand { get; }
+
         private string _graphName = string.Empty;
-        public ObservableCollection<ButtonModel> Buttons { get; } = new();
         private GridState _gridState = new() { RowCount = 3 };
+
+        #endregion
+
+        #region Properties
+
+        public ObservableCollection<ButtonModel> Buttons { get; } = new();
 
         public string GraphName
         {
             get => _graphName;
             set
             {
-                if (SetProperty(ref _graphName, value))
-                    AddGraphCommand?.CanExecute(null);
+                if (SetProperty(ref _graphName, value)) AddGraphCommand?.CanExecute(null);
             }
         }
 
@@ -51,6 +36,33 @@ namespace ThesisCourse_4.MVVM.ViewModels
             get => _gridState;
             private set => SetProperty(ref _gridState, value);
         }
+
+        public ICommand AddGraphCommand { get; }
+        public ICommand OpenAuthWindowCommand { get; }
+        public ICommand OpenGraphEditorCommand { get; }
+
+        #endregion
+
+        #region Constructor
+
+        public WelcomeViewModel(IThemeService themeService, IStorageService storageService, INavigationService navigationService) : base(themeService)
+        {
+            _storageService = storageService;
+            _navigationService = navigationService;
+
+            var saved = _storageService.LoadButtons();
+            foreach (var btn in saved) Buttons.Add(btn);
+
+            UpdateGridState();
+
+            AddGraphCommand = new RelayCommand(OnAddGraph, CanAddGraph);
+            OpenAuthWindowCommand = new RelayCommand(OnOpenAuthWindow);
+            OpenGraphEditorCommand = new RelayCommand<ButtonModel>(OpenGraphEditor);
+        }
+
+        #endregion
+
+        #region Methods
 
         private void OnAddGraph()
         {
@@ -83,9 +95,7 @@ namespace ThesisCourse_4.MVVM.ViewModels
             if (_gridState.RowCount != newRowCount)
             {
                 var newState = new GridState { RowCount = newRowCount };
-                for (int i = 0; i < newRowCount; i++)
-                    newState.RowHeights.Add(new GridRowHeight());
-
+                for (int i = 0; i < newRowCount; i++) newState.RowHeights.Add(new GridRowHeight());
                 GridState = newState;
             }
         }
@@ -93,10 +103,10 @@ namespace ThesisCourse_4.MVVM.ViewModels
         private bool CanAddGraph() => !string.IsNullOrWhiteSpace(GraphName);
 
         private void OnOpenAuthWindow() => _navigationService.ShowWindow<SmallAuthViewModel>();
-        private void OpenGraphEditor(ButtonModel button)
-        {
-            var title = button.Name;
-            _navigationService.ShowWindow<GraphEditorViewModel>(title);
-        }
+
+        private void OpenGraphEditor(ButtonModel button) =>
+            _navigationService.ShowWindow<GraphEditorViewModel>(button.Name);
+
+        #endregion
     }
 }

@@ -20,7 +20,11 @@
     <SolidColorBrush x:Key="ButtonPressedBackground" Color="#1D4ED8"/>
     <SolidColorBrush x:Key="ButtonForeground" Color="White"/>
 
+    <!-- Узлы -->
+    <SolidColorBrush x:Key="EdgeBrush" Color="#1F2937"/>
+
     <!-- Кнопка закрытия при наведении -->
     <SolidColorBrush x:Key="CloseButtonHoverBrush" Color="#EF4444"/>
+
 </ResourceDictionary>
 

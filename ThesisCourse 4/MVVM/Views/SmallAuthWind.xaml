@@ -26,7 +26,7 @@
 
         <StackPanel Margin="20">
 
-            <ctrl:CloseButton Height="26"/>
+            <ctrl:CloseButton Height="26" HorizontalAlignment="Right" Width="60"/>
 
             <ToggleButton Style="{StaticResource SwitchToggleButtonStyle}"
                           Width="60" Height="30"

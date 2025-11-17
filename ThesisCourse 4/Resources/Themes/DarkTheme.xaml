@@ -21,6 +21,9 @@
     <SolidColorBrush x:Key="ButtonPressedBackground" Color="#2A6399"/>
     <SolidColorBrush x:Key="ButtonForeground" Color="White"/>
 
+    <!-- Узлы -->
+    <SolidColorBrush x:Key="EdgeBrush" Color="#FFFFFF"/>
+
     <SolidColorBrush x:Key="CloseButtonHoverBrush" Color="#E53E3E"/>
 
 </ResourceDictionary>

@@ -1,0 +1,6 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <DropShadowEffect x:Key="DialogDropShadow" BlurRadius="12" ShadowDepth="0" Opacity="0.25" Color="#000000"/>
+
+</ResourceDictionary>
