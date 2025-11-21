@@ -9,7 +9,6 @@ namespace ThesisCourse_4.Services
     {
         IReadOnlyList<ButtonModel> LoadButtons();
         void SaveButtons(IEnumerable<ButtonModel> buttons);
-
         FullStorageModel? LoadAll();
         void SaveAll(IEnumerable<ButtonModel> buttons, IEnumerable<Node> nodes, IEnumerable<Edge> edges);
     }

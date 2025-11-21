@@ -31,6 +31,8 @@
                 <Grid>
                     <Canvas x:Name="PreviewCanvas" IsHitTestVisible="False"/>
 
+                    
+                    
                     <!-- Узлы -->
                     <ItemsControl ItemsSource="{Binding Edges}">
                         <ItemsControl.ItemsPanel>

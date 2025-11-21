@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
+using System.Xml.Linq;
 using ThesisCourse_4.MVVM.Commands;
 using ThesisCourse_4.MVVM.Models;
 using ThesisCourse_4.Services;
@@ -40,6 +42,8 @@ namespace ThesisCourse_4.MVVM.ViewModels
         public ICommand AddGraphCommand { get; }
         public ICommand OpenAuthWindowCommand { get; }
         public ICommand OpenGraphEditorCommand { get; }
+        public ICommand DeleteGraphCommand { get; }
+        public ICommand RenameGraphCommand { get; }
 
         #endregion
 
@@ -57,6 +61,8 @@ namespace ThesisCourse_4.MVVM.ViewModels
 
             AddGraphCommand = new RelayCommand(OnAddGraph, CanAddGraph);
             OpenAuthWindowCommand = new RelayCommand(OnOpenAuthWindow);
+            DeleteGraphCommand = new RelayCommand<string>(DeleteGraph);
+            RenameGraphCommand = new RelayCommand<string>(RenameGraph);
             OpenGraphEditorCommand = new RelayCommand<ButtonModel>(OpenGraphEditor);
         }
 
@@ -67,7 +73,14 @@ namespace ThesisCourse_4.MVVM.ViewModels
 
         private void OnAddGraph()
         {
-            if (string.IsNullOrWhiteSpace(GraphName)) return;
+            if (string.IsNullOrWhiteSpace(GraphName))
+                return;
+
+            if (Buttons.Any(b => b.Name.Equals(GraphName.Trim(), StringComparison.OrdinalIgnoreCase)))
+            {
+                MessageBox.Show("Такой граф уже существует");
+                return;
+            }
 
             int index = Buttons.Count;
             int row = index / 3;
@@ -87,19 +100,60 @@ namespace ThesisCourse_4.MVVM.ViewModels
             _storageService.SaveButtons(Buttons);
         }
 
+
+
+        private void RenameGraph(string oldName)
+        {
+            var btn = Buttons.FirstOrDefault(x => x.Name == oldName);
+            if (btn == null) return;
+            var newName = ShowInputDialog("Введите новое имя графа", btn.Name);
+            if (string.IsNullOrWhiteSpace(newName) || Buttons.Any(b => b.Name == newName))
+                return;
+
+            btn.Name = newName.Trim();
+            _storageService.SaveButtons(Buttons);
+        }
+
+        private string ShowInputDialog(string message, string defaultValue)
+        {
+            return Microsoft.VisualBasic.Interaction.InputBox(message, "Переименовать граф", defaultValue);
+        }
+
+        private void DeleteGraph(string graphName)
+        {
+            if (string.IsNullOrEmpty(graphName)) return;
+
+            var btn = Buttons.FirstOrDefault(x => x.Name == graphName);
+            if (btn != null)
+            {
+                Buttons.Remove(btn);
+
+                for (int i = 0; i < Buttons.Count; i++)
+                {
+                    Buttons[i].Row = i / 3;
+                    Buttons[i].Column = (i % 3) * 2;
+                }
+
+                UpdateGridState();
+                _storageService.SaveButtons(Buttons);
+            }
+        }
+
         private void UpdateGridState()
         {
             int minRows = 3;
-            int neededRows = Buttons.Count == 0 ? 1 : (Buttons.Count - 1) / 3 + 1;
+            int neededRows = Buttons.Count == 0 ? 1 : ((Buttons.Count - 1) / 3) + 1;
             int newRowCount = Math.Max(minRows, neededRows);
 
             if (_gridState.RowCount != newRowCount)
             {
                 var newState = new GridState { RowCount = newRowCount };
-                for (int i = 0; i < newRowCount; i++) newState.RowHeights.Add(new GridRowHeight());
+                for (int i = 0; i < newRowCount; i++)
+                    newState.RowHeights.Add(new GridRowHeight());
                 GridState = newState;
             }
         }
+
 
         private bool CanAddGraph() => !string.IsNullOrWhiteSpace(GraphName);
         private void OnOpenAuthWindow() => _navigationService.ShowWindow<SmallAuthViewModel>();

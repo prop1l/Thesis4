@@ -169,7 +169,6 @@ namespace ThesisCourse_4.MVVM.ViewModels
             }
         }
 
-
         private void AddNode()
         {
             if ((heightCnt + 1) % 6 == 0)

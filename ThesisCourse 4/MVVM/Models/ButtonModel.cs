@@ -5,17 +5,28 @@ namespace ThesisCourse_4.MVVM.Models
 {
     public class ButtonModel : INotifyPropertyChanged
     {
+        private int _row;
+        private int _column;
         private string _name = string.Empty;
         public string Name
         {
             get => _name;
-            set => SetProperty(ref _name, value);
+            set { if (_name != value) { _name = value; OnPropertyChanged(); } }
         }
-
-        public int Row { get; set; }
-        public int Column { get; set; }
-
+        public int Row
+        {
+            get => _row;
+            set { if (_row != value) { _row = value; OnPropertyChanged(); } }
+        }
+        public int Column
+        {
+            get => _column;
+            set { if (_column != value) { _column = value; OnPropertyChanged(); } }
+        }
         public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string prop = null) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+
 
         protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
         {

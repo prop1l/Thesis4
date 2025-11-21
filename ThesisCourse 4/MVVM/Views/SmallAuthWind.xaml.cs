@@ -32,7 +32,7 @@ namespace ThesisCourse_4.MVVM.Views
 
         #endregion
 
-        // TODO: Make DB & do login with API (Make API)
+        // TODO: Make DB & do login with API (Make API) DIPLOM
         private async void OnLoginButtonClick(object sender, RoutedEventArgs e)
         {
             string login = Login.Text;
