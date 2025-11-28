@@ -54,8 +54,9 @@ namespace ThesisCourse_4.MVVM.Views
 
         private void GraphEditorWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (DataContext is GraphEditorViewModel vm) vm.SaveGraph();
+            if (DataContext is GraphEditorViewModel vm) vm.SaveGraphSafe();
         }
+
 
         private void OnPreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {

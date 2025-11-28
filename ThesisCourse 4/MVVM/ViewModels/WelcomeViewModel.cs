@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml.Linq;
@@ -100,18 +101,38 @@ namespace ThesisCourse_4.MVVM.ViewModels
             _storageService.SaveButtons(Buttons);
         }
 
-
-
         private void RenameGraph(string oldName)
         {
             var btn = Buttons.FirstOrDefault(x => x.Name == oldName);
             if (btn == null) return;
+
             var newName = ShowInputDialog("Введите новое имя графа", btn.Name);
             if (string.IsNullOrWhiteSpace(newName) || Buttons.Any(b => b.Name == newName))
                 return;
 
-            btn.Name = newName.Trim();
-            _storageService.SaveButtons(Buttons);
+            newName = newName.Trim();
+
+            string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string folder = Path.Combine(appData, "ThesisCourse_4");
+
+            string oldPath = Path.Combine(folder, $"{oldName}.json");
+            string newPath = Path.Combine(folder, $"{newName}.json");
+
+            try
+            {
+                if (File.Exists(oldPath) && !File.Exists(newPath))
+                {
+                    File.Move(oldPath, newPath);
+                }
+
+                btn.Name = newName;
+                _storageService.SaveButtons(Buttons);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Не удалось переименовать файл графа:\n{ex.Message}",
+                                "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private string ShowInputDialog(string message, string defaultValue)
@@ -121,22 +142,38 @@ namespace ThesisCourse_4.MVVM.ViewModels
 
         private void DeleteGraph(string graphName)
         {
-            if (string.IsNullOrEmpty(graphName)) return;
+            if (string.IsNullOrEmpty(graphName))
+                return;
 
             var btn = Buttons.FirstOrDefault(x => x.Name == graphName);
-            if (btn != null)
+            if (btn == null)
+                return;
+
+            try
             {
-                Buttons.Remove(btn);
+                string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                string folder = Path.Combine(appData, "ThesisCourse_4");
+                string path = Path.Combine(folder, $"{graphName}.json");
 
-                for (int i = 0; i < Buttons.Count; i++)
-                {
-                    Buttons[i].Row = i / 3;
-                    Buttons[i].Column = (i % 3) * 2;
-                }
-
-                UpdateGridState();
-                _storageService.SaveButtons(Buttons);
+                if (File.Exists(path))
+                    File.Delete(path);
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Не удалось удалить файл графа:\n{ex.Message}",
+                                "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            Buttons.Remove(btn);
+
+            for (int i = 0; i < Buttons.Count; i++)
+            {
+                Buttons[i].Row = i / 3;
+                Buttons[i].Column = (i % 3) * 2;
+            }
+
+            UpdateGridState();
+            _storageService.SaveButtons(Buttons);
         }
 
         private void UpdateGridState()
@@ -153,7 +190,6 @@ namespace ThesisCourse_4.MVVM.ViewModels
                 GridState = newState;
             }
         }
-
 
         private bool CanAddGraph() => !string.IsNullOrWhiteSpace(GraphName);
         private void OnOpenAuthWindow() => _navigationService.ShowWindow<SmallAuthViewModel>();

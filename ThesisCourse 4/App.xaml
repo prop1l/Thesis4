@@ -38,6 +38,10 @@
                 <ResourceDictionary Source="/Resources/Icons/Icon.xaml"/>
                 <ResourceDictionary Source="/Resources/Icons/Trash.xaml"/>
 
+                <!--    ComboBoxes  -->
+                <ResourceDictionary Source="/Resources/Styles/ComboBoxes/GraphComboBoxStyle.xaml"/>
+                <ResourceDictionary Source="/Resources/Styles/ComboBoxes/CleanComboBox.xaml"/>
+
                 <ResourceDictionary Source="/Resources/DropShadow.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
