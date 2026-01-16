@@ -31,7 +31,7 @@
             <TextBlock Text="{Binding Title, RelativeSource={RelativeSource AncestorType=Window}}"
                        Foreground="{DynamicResource TitleBarForegroundBrush}"
                        VerticalAlignment="Center"
-                       Margin="10,0"
+                       Margin="70 0 10 0"
                        Grid.Column="0"
                        FontSize="24"/>
 

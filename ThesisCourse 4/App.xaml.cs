@@ -10,6 +10,7 @@ namespace ThesisCourse_4
     {
         private IServiceProvider? _serviceProvider;
         public static ThemeService? ThemeService { get; private set; }
+        public static ILocalizationService LocalizationService { get; internal set; }
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -17,17 +18,20 @@ namespace ThesisCourse_4
 
             // Сервисы
             services.AddSingleton<IThemeService, ThemeService>();
+            services.AddSingleton<ILocalizationService, LocalizationService>();
             services.AddSingleton<IStorageService, FileStorageService>();
             services.AddSingleton<INavigationService>(sp => new NavigationService(sp));
 
             // ViewModels
             services.AddTransient<WelcomeViewModel>();
             services.AddTransient<SmallAuthViewModel>();
+            services.AddTransient<SmallRegViewModel>();
             services.AddTransient<GraphEditorViewModel>();
 
             // Views (если понадобится в NavigationService)
             services.AddTransient<Welcome>();
             services.AddTransient<SmallAuthWind>();
+            services.AddTransient<SmallRegWindow>();
             services.AddTransient<GraphEditorWindow>();
 
             _serviceProvider = services.BuildServiceProvider();

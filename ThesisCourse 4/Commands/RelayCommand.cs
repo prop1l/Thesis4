@@ -1,13 +1,19 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 
 namespace ThesisCourse_4.MVVM.Commands
 {
     public class RelayCommand : ICommand
     {
-        private readonly Action _execute;
-        private readonly Func<bool>? _canExecute;
+        private readonly Action<object?>? _execute;
+        private readonly Func<object?, bool>? _canExecute;
 
-        public RelayCommand(Action execute, Func<bool>? canExecute = null)
+        public RelayCommand(Action execute) : this(_ => execute(), null) { }
+        public RelayCommand(Action<object?> execute) : this(execute, null) { }
+        public RelayCommand(Action execute, Func<bool> canExecute)
+            : this(o => execute(), canExecute != null ? x => canExecute() : (Func<object?, bool>?)null) { }
+
+        public RelayCommand(Action<object?> execute, Func<object?, bool>? canExecute)
         {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
@@ -19,17 +25,17 @@ namespace ThesisCourse_4.MVVM.Commands
             remove => CommandManager.RequerySuggested -= value;
         }
 
-        public bool CanExecute(object? parameter) => _canExecute?.Invoke() ?? true;
-
-        public void Execute(object? parameter) => _execute();
+        public bool CanExecute(object? parameter) => _canExecute?.Invoke(parameter) ?? true;
+        public void Execute(object? parameter) => _execute!(parameter);
     }
 
     public class RelayCommand<T> : ICommand
     {
-        private readonly Action<T> _execute;
-        private readonly Predicate<T>? _canExecute;
+        private readonly Action<T>? _execute;
+        private readonly Func<T, bool>? _canExecute;
 
-        public RelayCommand(Action<T> execute, Predicate<T>? canExecute = null)
+        public RelayCommand(Action<T> execute) : this(execute, null) { }
+        public RelayCommand(Action<T> execute, Func<T, bool>? canExecute)
         {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
@@ -42,7 +48,6 @@ namespace ThesisCourse_4.MVVM.Commands
         }
 
         public bool CanExecute(object? parameter) => _canExecute?.Invoke((T)parameter!) ?? true;
-
-        public void Execute(object? parameter) => _execute((T)parameter!);
+        public void Execute(object? parameter) => _execute!((T)parameter!);
     }
 }

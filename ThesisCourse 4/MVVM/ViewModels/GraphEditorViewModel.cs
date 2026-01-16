@@ -9,6 +9,7 @@ using System.Windows.Input;
 using ThesisCourse_4.MVVM.Commands;
 using ThesisCourse_4.MVVM.Models;
 using ThesisCourse_4.MVVM.Views;
+using System.Numerics;
 
 namespace ThesisCourse_4.MVVM.ViewModels
 {
@@ -108,7 +109,7 @@ namespace ThesisCourse_4.MVVM.ViewModels
             SaveGraph();
         }
 
-        private void SaveGraph()
+        public void SaveGraph()
         {
             if (string.IsNullOrEmpty(_graphFilePath))
                 throw new InvalidOperationException("Graph file path is not set.");
@@ -117,8 +118,8 @@ namespace ThesisCourse_4.MVVM.ViewModels
             {
                 var saveModel = new
                 {
-                    Nodes = Nodes.ToList(),
-                    Edges = Edges.ToList()
+                    Nodes = Nodes.Select(n => new { n.Id, n.Label, n.X, n.Y }).ToList(),
+                    Edges = Edges.Select(e => new { e.FromNodeId, e.ToNodeId }).ToList()
                 };
 
                 var options = new JsonSerializerOptions { WriteIndented = true };
@@ -312,15 +313,89 @@ namespace ThesisCourse_4.MVVM.ViewModels
 
         private void FullRandomizeLayout()
         {
-            double minX = NodeRadius;
-            double maxX = CanvasWidth - NodeRadius;
-            double minY = NodeRadius;
-            double maxY = CanvasHeight - NodeRadius;
+            if (Nodes.Count == 0) return;
 
-            foreach (var node in Nodes)
+            double minX = NodeRadius, maxX = CanvasWidth - NodeRadius;
+            double minY = NodeRadius, maxY = CanvasHeight - NodeRadius;
+            double minDist = NodeRadius * 4;
+
+            var active = new List<(Vector2 pos, int nodeIndex)>();
+            var placed = new bool[Nodes.Count];
+
+            // Первый узел случайный
+            int firstIndex = _rand.Next(Nodes.Count);
+            Nodes[firstIndex].X = minX + _rand.NextDouble() * (maxX - minX);
+            Nodes[firstIndex].Y = minY + _rand.NextDouble() * (maxY - minY);
+            active.Add((new Vector2((float)Nodes[firstIndex].X, (float)Nodes[firstIndex].Y), firstIndex));
+            placed[firstIndex] = true;
+
+            const int maxTries = 30;
+            while (active.Count > 0)
             {
-                node.X = _rand.NextDouble() * (maxX - minX) + minX;
-                node.Y = _rand.NextDouble() * (maxY - minY) + minY;
+                int idx = _rand.Next(active.Count);
+                var current = active[idx]; // var current вместо деструктуризации
+
+                bool found = false;
+                for (int i = 0; i < maxTries; i++)
+                {
+                    double angle = _rand.NextDouble() * 2 * Math.PI;
+                    double radius = minDist * (0.7 + _rand.NextDouble() * 0.6);
+
+                    float candidateX = current.pos.X + (float)(Math.Cos(angle) * radius);
+                    float candidateY = current.pos.Y + (float)(Math.Sin(angle) * radius);
+
+                    if (candidateX < minX || candidateX > maxX || candidateY < minY || candidateY > maxY)
+                        continue;
+
+                    bool ok = true;
+                    for (int j = 0; j < Nodes.Count; j++)
+                    {
+                        if (!placed[j]) continue;
+                        double dx = Nodes[j].X - candidateX;
+                        double dy = Nodes[j].Y - candidateY;
+                        if (dx * dx + dy * dy < minDist * minDist)
+                        {
+                            ok = false;
+                            break;
+                        }
+                    }
+
+                    if (ok)
+                    {
+                        int targetIndex = -1;
+                        for (int j = 0; j < Nodes.Count; j++)
+                        {
+                            if (!placed[j])
+                            {
+                                targetIndex = j;
+                                break;
+                            }
+                        }
+
+                        if (targetIndex != -1)
+                        {
+                            Nodes[targetIndex].X = candidateX;
+                            Nodes[targetIndex].Y = candidateY;
+                            placed[targetIndex] = true;
+                            active.Add((new Vector2(candidateX, candidateY), targetIndex));
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!found)
+                    active.RemoveAt(idx);
+            }
+
+            // Остальные узлы - обычный рандом
+            for (int i = 0; i < Nodes.Count; i++)
+            {
+                if (!placed[i])
+                {
+                    Nodes[i].X = minX + _rand.NextDouble() * (maxX - minX);
+                    Nodes[i].Y = minY + _rand.NextDouble() * (maxY - minY);
+                }
             }
         }
 

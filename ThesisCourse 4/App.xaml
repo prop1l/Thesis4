@@ -9,9 +9,11 @@
                 <!-- ТЕМА ПО УМОЛЧАНИЮ (обязательно первая!) -->
                 <ResourceDictionary Source="/Resources/Themes/LightTheme.xaml" />
 
-                <!--
-                        СТИЛИ
--->
+                <!-- ЯЗЫК ПО УМАЛЧАНИЮ -->
+                <ResourceDictionary Source="/Resources/Languages/Strings.ru.xaml" />
+
+                <!--    СТИЛИ    -->
+                
                 <!--    Buttons  -->
                 <ResourceDictionary Source="/Resources/Styles/Buttons/CloseTitleBarButtonStyle.xaml"/>
                 <ResourceDictionary Source="/Resources/Styles/Buttons/RoundedButton.xaml"/>
@@ -42,6 +44,7 @@
                 <ResourceDictionary Source="/Resources/Styles/ComboBoxes/GraphComboBoxStyle.xaml"/>
                 <ResourceDictionary Source="/Resources/Styles/ComboBoxes/CleanComboBox.xaml"/>
 
+                
                 <ResourceDictionary Source="/Resources/DropShadow.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>

@@ -15,6 +15,7 @@ namespace ThesisCourse_4.MVVM.ViewModels
 
         private readonly IStorageService _storageService;
         private readonly INavigationService _navigationService;
+        private readonly ILocalizationService _localizationService;
 
         private string _graphName = string.Empty;
         private GridState _gridState = new() { RowCount = 3 };
@@ -45,15 +46,17 @@ namespace ThesisCourse_4.MVVM.ViewModels
         public ICommand OpenGraphEditorCommand { get; }
         public ICommand DeleteGraphCommand { get; }
         public ICommand RenameGraphCommand { get; }
+        public ICommand ChangeLanguageCommand { get; }
 
         #endregion
 
         #region Constructor
 
-        public WelcomeViewModel(IThemeService themeService, IStorageService storageService, INavigationService navigationService) : base(themeService)
+        public WelcomeViewModel(IThemeService themeService, IStorageService storageService, INavigationService navigationService, ILocalizationService localizationService) : base(themeService)
         {
             _storageService = storageService;
             _navigationService = navigationService;
+            _localizationService = localizationService;
 
             var saved = _storageService.LoadButtons();
             foreach (var btn in saved) Buttons.Add(btn);
@@ -65,6 +68,7 @@ namespace ThesisCourse_4.MVVM.ViewModels
             DeleteGraphCommand = new RelayCommand<string>(DeleteGraph);
             RenameGraphCommand = new RelayCommand<string>(RenameGraph);
             OpenGraphEditorCommand = new RelayCommand<ButtonModel>(OpenGraphEditor);
+            ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
         }
 
 
@@ -155,8 +159,7 @@ namespace ThesisCourse_4.MVVM.ViewModels
                 string folder = Path.Combine(appData, "ThesisCourse_4");
                 string path = Path.Combine(folder, $"{graphName}.json");
 
-                if (File.Exists(path))
-                    File.Delete(path);
+                if (File.Exists(path)) File.Delete(path);
             }
             catch (Exception ex)
             {
@@ -191,6 +194,7 @@ namespace ThesisCourse_4.MVVM.ViewModels
             }
         }
 
+        private void ChangeLanguage() => _localizationService.ChangeLangAuto();
         private bool CanAddGraph() => !string.IsNullOrWhiteSpace(GraphName);
         private void OnOpenAuthWindow() => _navigationService.ShowWindow<SmallAuthViewModel>();
         private void OpenGraphEditor(ButtonModel button)

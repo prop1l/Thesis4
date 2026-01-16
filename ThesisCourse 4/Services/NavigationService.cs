@@ -29,6 +29,7 @@ namespace ThesisCourse_4.Services
             {
                 _ when vmType == typeof(WelcomeViewModel) => typeof(Welcome),
                 _ when vmType == typeof(SmallAuthViewModel) => typeof(SmallAuthWind),
+                _ when vmType == typeof(SmallRegViewModel) => typeof(SmallRegWindow),
                 _ => throw new ArgumentException($"Не найдено окно для {vmType.Name}")
             };
 

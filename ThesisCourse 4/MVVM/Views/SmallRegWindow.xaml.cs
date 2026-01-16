@@ -5,9 +5,9 @@ using System.Windows.Media;
 
 namespace ThesisCourse_4.MVVM.Views
 {
-    public partial class SmallAuthWind : Window
+    public partial class SmallRegWindow : Window
     {
-        public SmallAuthWind()
+        public SmallRegWindow()
         {
             InitializeComponent();
         }
@@ -28,31 +28,31 @@ namespace ThesisCourse_4.MVVM.Views
             if (sender is TextBox loginTextBox) loginTextBox.Foreground = Brushes.Black;
         }
 
-        #endregion
-
-        // TODO: Make DB & do login with API (Make API) DIPLOM
-        private async void OnLoginButtonClick(object sender, RoutedEventArgs e)
+        private async void OnLoginButtonClickInRegistraton(object sender, RoutedEventArgs e)
         {
             string login = Login.Text;
             string password = Password.Password;
+            string passwordAgain = PasswordAgain.Password;
 
-            if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrEmpty(login) && string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("Введите логин и пароль");
                 return;
             }
 
-            try
+            if (password != passwordAgain)
             {
-                bool isValid = await DatabaseService.ValidateUserAsync(login, password);
+                MessageBox.Show("Пароли не совпадают");
+                return;
+            }
 
-                if (isValid) MessageBox.Show("Успешный вход!");
-                else MessageBox.Show("Неверный логин или пароль");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка подключения: {ex.Message}");
-            }
+            var user = await DatabaseService.CreateUserAsync(login, password);
+
+            MessageBox.Show($"{user?.UserName}   ");
+
+            return;
         }
+
+        #endregion
     }
 }

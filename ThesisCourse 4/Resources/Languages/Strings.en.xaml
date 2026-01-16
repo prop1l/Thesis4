@@ -1,0 +1,38 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- General -->
+    <sys:String x:Key="General_Login" xmlns:sys="clr-namespace:System;assembly=mscorlib">Login</sys:String>
+    <sys:String x:Key="General_Password" xmlns:sys="clr-namespace:System;assembly=mscorlib">Password</sys:String>
+    <sys:String x:Key="General_PasswordAgain" xmlns:sys="clr-namespace:System;assembly=mscorlib">Repeat password</sys:String>
+    <sys:String x:Key="General_In" xmlns:sys="clr-namespace:System;assembly=mscorlib">Sign in</sys:String>
+
+    <!-- Auth window -->
+    <sys:String x:Key="Auth_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Sign in</sys:String>
+    <sys:String x:Key="Auth_NoAccount" xmlns:sys="clr-namespace:System;assembly=mscorlib">No account yet?</sys:String>
+
+    <!-- Reg window -->
+    <sys:String x:Key="Reg_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Registration</sys:String>
+    <sys:String x:Key="Reg_YesAccount" xmlns:sys="clr-namespace:System;assembly=mscorlib">Already have an account?</sys:String>
+
+    <!-- Weclome window -->
+    <!-- Settings button -->
+    <sys:String x:Key="Menu_ChangeLanguage" xmlns:sys="clr-namespace:System;assembly=mscorlib">Change language</sys:String>
+    <sys:String x:Key="Menu_ChangeTheme" xmlns:sys="clr-namespace:System;assembly=mscorlib">Change theme</sys:String>
+
+    <!-- Main labels-->
+    <sys:String x:Key="Welcome_Add_Card" xmlns:sys="clr-namespace:System;assembly=mscorlib">Add</sys:String>
+    <sys:String x:Key="Welcome_Sign" xmlns:sys="clr-namespace:System;assembly=mscorlib">🔐 Sign in</sys:String>
+    <sys:String x:Key="Welcome_Name_Card" xmlns:sys="clr-namespace:System;assembly=mscorlib">Input name to graph</sys:String>
+
+    <!-- Editor window -->
+    <sys:String x:Key="Editor_Add_Edges" xmlns:sys="clr-namespace:System;assembly=mscorlib">Add node</sys:String>
+    <sys:String x:Key="Editor_Delete_Edges" xmlns:sys="clr-namespace:System;assembly=mscorlib">Delete node</sys:String>
+    <sys:String x:Key="Editor_Delete_All" xmlns:sys="clr-namespace:System;assembly=mscorlib">Delete all</sys:String>
+    <sys:String x:Key="Editor_Random" xmlns:sys="clr-namespace:System;assembly=mscorlib">Random position</sys:String>
+    <sys:String x:Key="Editor_BFS" xmlns:sys="clr-namespace:System;assembly=mscorlib">BFS random</sys:String>
+    <sys:String x:Key="Editor_Tree" xmlns:sys="clr-namespace:System;assembly=mscorlib">Tree</sys:String>
+    <sys:String x:Key="Editor_Matrixn" xmlns:sys="clr-namespace:System;assembly=mscorlib">Matrix</sys:String>
+    <sys:String x:Key="Editor_Save" xmlns:sys="clr-namespace:System;assembly=mscorlib">Save</sys:String>
+
+</ResourceDictionary>

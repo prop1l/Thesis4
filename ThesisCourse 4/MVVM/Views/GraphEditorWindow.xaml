@@ -46,7 +46,8 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Line Stroke="{DynamicResource EdgeBrush}" StrokeThickness="2"
+                                <Line Stroke="{DynamicResource EdgeBrush}" 
+                                      StrokeThickness="2"
                                       X1="{Binding FromNode.CenterX}"
                                       Y1="{Binding FromNode.CenterY}"
                                       X2="{Binding ToNode.CenterX}"
@@ -74,20 +75,20 @@
                             <DataTemplate>
                                 <StackPanel>
                                     <Ellipse x:Name="NodeEllipse"
-                         Width="60" Height="60"
-                         Fill="LightSteelBlue"
-                         Stroke="SteelBlue"
-                         StrokeThickness="2"
-                         PreviewMouseLeftButtonDown="Ellipse_PreviewMouseLeftButtonDown"
-                         PreviewMouseMove="Ellipse_PreviewMouseMove"
-                         PreviewMouseLeftButtonUp="Ellipse_PreviewMouseLeftButtonUp"
-                         PreviewMouseRightButtonDown="Ellipse_PreviewMouseRightButtonDown"
-                         PreviewMouseRightButtonUp="Ellipse_PreviewMouseRightButtonUp"/>
+                                             Width="60" Height="60"
+                                             Fill="LightSteelBlue"
+                                             Stroke="SteelBlue"
+                                             StrokeThickness="2"
+                                             PreviewMouseLeftButtonDown="Ellipse_PreviewMouseLeftButtonDown"
+                                             PreviewMouseMove="Ellipse_PreviewMouseMove"
+                                             PreviewMouseLeftButtonUp="Ellipse_PreviewMouseLeftButtonUp"
+                                             PreviewMouseRightButtonDown="Ellipse_PreviewMouseRightButtonDown"
+                                             PreviewMouseRightButtonUp="Ellipse_PreviewMouseRightButtonUp"/>
 
                                     <TextBlock Text="{Binding Label}"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center"
-                           Foreground="{DynamicResource ForegroundBrush}"/>
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"
+                                               Foreground="{DynamicResource ForegroundBrush}"/>
                                 </StackPanel>
 
                                 <DataTemplate.Triggers>
@@ -97,7 +98,7 @@
                                                 <Binding />
                                                 <!-- текущий Node -->
                                                 <Binding Path="DataContext.SelectedNodeToRemove"
-                                     RelativeSource="{RelativeSource AncestorType=Window}"/>
+                                                         RelativeSource="{RelativeSource AncestorType=Window}"/>
                                             </MultiBinding>
                                         </DataTrigger.Binding>
                                         <Setter TargetName="NodeEllipse" Property="Stroke" Value="Red"/>
@@ -114,7 +115,7 @@
                             VerticalAlignment="Bottom"
                             Margin="20,0,0,20"
                             Panel.ZIndex="99">
-                        <Image Source="/Resources/Icons/free-icon-delete-1214428.png"
+                        <Image Source="/Resources/Icons/TrashIcon.png"
                                Width="80" Height="80"/>
                     </Canvas>
                 </Grid>
@@ -128,7 +129,7 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal">
 
-                <Button Content="Добавить Узел"
+                <Button Content="{DynamicResource Editor_Add_Edges}"
                         Command="{Binding AddNodeCommand}" 
                         Style="{StaticResource RoundedButton}"
                         Margin="5"/>
@@ -151,36 +152,32 @@
                         Style="{StaticResource RoundedButton}"
                         Margin="5"/>
 
-                <Button Content="Удалить узел"
+                <Button Content="{DynamicResource Editor_Delete_Edges}"
                         Command="{Binding RemoveSelectedNodeCommand}"
                         Style="{StaticResource RoundedButton}"
                         Margin="5"/>
 
-
-
-
-
-                <Button Content="Удалить все"
+                <Button Content="{DynamicResource Editor_Delete_All}"
                         Command="{Binding RemoveAllCommand}"
                         Style="{StaticResource RoundedButton}"
                         Margin="5"/>
 
-                <Button Content="Случайное"
+                <Button Content="{DynamicResource Editor_Random}"
                         Command="{Binding FullRandomizeLayoutCommand}"
                         Style="{StaticResource RoundedButton}"
                         Margin="5"/>
-                
-                <Button Content="BFS рандом"
+
+                <Button Content="{DynamicResource Editor_BFS}"
                         Command="{Binding RandomizeLayoutCommand}"
                         Style="{StaticResource RoundedButton}"
                         Margin="5"/>
 
-                <Button Content="Древовидное"
+                <Button Content="{DynamicResource Editor_Tree}"
                         Command="{Binding TreeLayoutCommand}"
                         Style="{StaticResource RoundedButton}"
                         Margin="5"/>
 
-                <Button Content="Матрица смежности"
+                <Button Content="{DynamicResource Editor_Matrixn}"
                         Command="{Binding OpenMatrixCommand}"
                         Style="{StaticResource RoundedButton}"
                         Margin="5"/>
@@ -188,8 +185,8 @@
             </StackPanel>
             
             <StackPanel Grid.Column="2" Orientation="Horizontal">
-                
-                <Button Content="Сохранить" Grid.Column="2"
+
+                <Button Content="{DynamicResource Editor_Save}" Grid.Column="2"
                     Command="{Binding SaveCommand}" 
                     Style="{StaticResource RoundedButton}"
                     Margin="5"/>

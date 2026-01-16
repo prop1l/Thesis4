@@ -1,0 +1,38 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- General -->
+    <sys:String x:Key="General_Login" xmlns:sys="clr-namespace:System;assembly=mscorlib">Логин</sys:String>
+    <sys:String x:Key="General_Password" xmlns:sys="clr-namespace:System;assembly=mscorlib">Пароль</sys:String>
+    <sys:String x:Key="General_PasswordAgain" xmlns:sys="clr-namespace:System;assembly=mscorlib">Повторите пароль</sys:String>
+    <sys:String x:Key="General_In" xmlns:sys="clr-namespace:System;assembly=mscorlib">Войти</sys:String>
+
+    <!-- Auth window -->
+    <sys:String x:Key="Auth_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Авторизация</sys:String>
+    <sys:String x:Key="Auth_NoAccount" xmlns:sys="clr-namespace:System;assembly=mscorlib">Ещё нет аккаунта?</sys:String>
+    
+    <!-- Reg window -->
+    <sys:String x:Key="Reg_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Регистрация</sys:String>
+    <sys:String x:Key="Reg_YesAccount" xmlns:sys="clr-namespace:System;assembly=mscorlib">Уже есть аккаунт? Войти!</sys:String>
+
+    <!-- Weclome window -->
+    <!-- Settings button -->
+    <sys:String x:Key="Menu_ChangeLanguage" xmlns:sys="clr-namespace:System;assembly=mscorlib">Переключить язык</sys:String>
+    <sys:String x:Key="Menu_ChangeTheme" xmlns:sys="clr-namespace:System;assembly=mscorlib">Переключить тему</sys:String>
+
+    <!-- Main labels-->
+    <sys:String x:Key="Welcome_Add_Card" xmlns:sys="clr-namespace:System;assembly=mscorlib">Добавить</sys:String>
+    <sys:String x:Key="Welcome_Sign" xmlns:sys="clr-namespace:System;assembly=mscorlib">🔐 Войти</sys:String>
+    <sys:String x:Key="Welcome_Name_Card" xmlns:sys="clr-namespace:System;assembly=mscorlib">Введите название для графа</sys:String>
+    
+    <!-- Editor window -->
+    <sys:String x:Key="Editor_Add_Edges" xmlns:sys="clr-namespace:System;assembly=mscorlib">Добавить вершину</sys:String>
+    <sys:String x:Key="Editor_Delete_Edges" xmlns:sys="clr-namespace:System;assembly=mscorlib">Удалить вершину</sys:String>
+    <sys:String x:Key="Editor_Delete_All" xmlns:sys="clr-namespace:System;assembly=mscorlib">Удалить все</sys:String>
+    <sys:String x:Key="Editor_Random" xmlns:sys="clr-namespace:System;assembly=mscorlib">Случайное</sys:String>
+    <sys:String x:Key="Editor_BFS" xmlns:sys="clr-namespace:System;assembly=mscorlib">BFS рандом</sys:String>
+    <sys:String x:Key="Editor_Tree" xmlns:sys="clr-namespace:System;assembly=mscorlib">Древовидное</sys:String>
+    <sys:String x:Key="Editor_Matrixn" xmlns:sys="clr-namespace:System;assembly=mscorlib">Матрица смежности</sys:String>
+    <sys:String x:Key="Editor_Save" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сохранить</sys:String>
+
+    
+</ResourceDictionary>
