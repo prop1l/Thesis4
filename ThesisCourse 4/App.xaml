@@ -37,8 +37,7 @@
                 <ResourceDictionary Source="/Resources/Styles/DataGrids/AdjacencyMatrixDataGridStyle.xaml"/>
 
                 <!--    Icons  -->
-                <ResourceDictionary Source="/Resources/Icons/Icon.xaml"/>
-                <ResourceDictionary Source="/Resources/Icons/Trash.xaml"/>
+                <ResourceDictionary Source="/Resources/Icons/AddIcon.xaml"/>
 
                 <!--    ComboBoxes  -->
                 <ResourceDictionary Source="/Resources/Styles/ComboBoxes/GraphComboBoxStyle.xaml"/>
