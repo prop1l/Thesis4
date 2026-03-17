@@ -1,17 +1,16 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using ThesisCourse_4.Services;
 
 namespace ThesisCourse_4.MVVM.ViewModels
 {
     public abstract class ThemedViewModelBase : INotifyPropertyChanged
     {
-        private readonly IThemeService _themeService;
+        protected IThemeService ThemeService { get; }
 
-        public ThemedViewModelBase(IThemeService themeService)
+        protected ThemedViewModelBase(IThemeService themeService)
         {
-            _themeService = themeService;
-            _isLight = _themeService.IsLight;
+            ThemeService = themeService;
+            _isLight = ThemeService.CurrentTheme == "Light";
         }
 
         private bool _isLight;
@@ -22,7 +21,7 @@ namespace ThesisCourse_4.MVVM.ViewModels
             {
                 if (SetProperty(ref _isLight, value))
                 {
-                    _themeService.IsLight = value;
+                    ThemeService.SetTheme(value ? "Light" : "Dark");
                 }
             }
         }

@@ -1,51 +1,44 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
+﻿using System.Windows;
 
-namespace ThesisCourse_4.Services
+public interface IThemeService
 {
-    public interface IThemeService : INotifyPropertyChanged
+    string CurrentTheme { get; }
+    void SetTheme(string themeName);
+    void ToggleTheme();
+}
+
+public class ThemeService : IThemeService
+{
+    public string CurrentTheme { get; private set; } = "Light";
+
+    public void SetTheme(string themeName)
     {
-        bool IsLight { get; set; }
+        if (themeName != "Light" && themeName != "Dark")
+            themeName = "Light";
+
+        CurrentTheme = themeName;
+
+        var dict = new ResourceDictionary
+        {
+            Source = new Uri(
+                themeName == "Light"
+                    ? "Resources/Themes/LightTheme.xaml"
+                    : "Resources/Themes/DarkTheme.xaml",
+                UriKind.Relative)
+        };
+
+        var oldDict = Application.Current.Resources.MergedDictionaries
+            .FirstOrDefault(d => d.Source != null &&
+                                 d.Source.OriginalString.Contains("Theme."));
+        if (oldDict != null)
+            Application.Current.Resources.MergedDictionaries.Remove(oldDict);
+
+        Application.Current.Resources.MergedDictionaries.Add(dict);
     }
 
-    public class ThemeService : IThemeService
+    public void ToggleTheme()
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        private bool _isLight = true;
-        
-        public bool IsLight
-        {
-            get => _isLight;
-            set
-            {
-                if (SetProperty(ref _isLight, value)) ApplyTheme(value);
-            }
-        }
-
-        public ThemeService()
-        {
-            ApplyTheme(_isLight);
-        }
-
-        private void ApplyTheme(bool isLight)
-        {
-            var path = isLight ? "Resources/Themes/LightTheme.xaml" : "Resources/Themes/DarkTheme.xaml";
-
-            var theme = (ResourceDictionary)Application.LoadComponent(new Uri(path, UriKind.Relative));
-            var dicts = Application.Current.Resources.MergedDictionaries;
-
-            if (dicts.Count > 0) dicts[0] = theme;
-            else dicts.Add(theme);
-        }
-
-        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-            field = value;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            return true;
-        }
+        var themeName = CurrentTheme == "Light" ? "Dark" : "Light";
+        SetTheme(themeName);
     }
 }

@@ -47,12 +47,18 @@ namespace ThesisCourse_4.MVVM.ViewModels
         public ICommand DeleteGraphCommand { get; }
         public ICommand RenameGraphCommand { get; }
         public ICommand ChangeLanguageCommand { get; }
+        public ICommand ToggleThemeCommand { get; }
 
         #endregion
 
         #region Constructor
 
-        public WelcomeViewModel(IThemeService themeService, IStorageService storageService, INavigationService navigationService, ILocalizationService localizationService) : base(themeService)
+        public WelcomeViewModel(
+            IThemeService themeService,
+            IStorageService storageService,
+            INavigationService navigationService,
+            ILocalizationService localizationService)
+            : base(themeService)
         {
             _storageService = storageService;
             _navigationService = navigationService;
@@ -69,6 +75,7 @@ namespace ThesisCourse_4.MVVM.ViewModels
             RenameGraphCommand = new RelayCommand<string>(RenameGraph);
             OpenGraphEditorCommand = new RelayCommand<ButtonModel>(OpenGraphEditor);
             ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
+            ToggleThemeCommand = new RelayCommand(ChangeTheme);
         }
 
 
@@ -195,6 +202,11 @@ namespace ThesisCourse_4.MVVM.ViewModels
         }
 
         private void ChangeLanguage() => _localizationService.ChangeLangAuto();
+        private void ChangeTheme()
+        {
+            ThemeService.ToggleTheme();
+            IsLight = ThemeService.CurrentTheme == "Light";
+        }
         private bool CanAddGraph() => !string.IsNullOrWhiteSpace(GraphName);
         private void OnOpenAuthWindow() => _navigationService.ShowWindow<SmallAuthViewModel>();
         private void OpenGraphEditor(ButtonModel button)
